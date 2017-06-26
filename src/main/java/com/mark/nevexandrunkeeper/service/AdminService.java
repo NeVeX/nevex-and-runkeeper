@@ -1,14 +1,15 @@
 package com.mark.nevexandrunkeeper.service;
 
+import com.mark.nevexandrunkeeper.config.ApplicationProperties;
+import com.mark.nevexandrunkeeper.dao.entity.AdminCommentJobRunEntity;
+import com.mark.nevexandrunkeeper.dao.entity.CommentJobEntity;
 import com.mark.nevexandrunkeeper.model.QuotationResponse;
 import com.mark.nevexandrunkeeper.model.User;
-import com.mark.nevexandrunkeeper.model.entity.AdminCommentJobRunEntity;
-import com.mark.nevexandrunkeeper.model.entity.CommentJobEntity;
 import com.mark.nevexandrunkeeper.model.runkeeper.RunKeeperFitnessActivityResponse;
+import com.mark.nevexandrunkeeper.service.quotes.QuotationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -30,8 +31,12 @@ public class AdminService {
     @Autowired
     private QuotationService quotationService;
 
-    @Value("${application.oauth-access-token}")
-    private String applicationAccessToken;
+    private final String applicationAccessToken;
+
+    @Autowired
+    public AdminService(ApplicationProperties.OAuth oauthProperties) {
+        this.applicationAccessToken = oauthProperties.getAccessToken();
+    }
 
     public AdminCommentJobRunEntity runCommentsJob() {
 

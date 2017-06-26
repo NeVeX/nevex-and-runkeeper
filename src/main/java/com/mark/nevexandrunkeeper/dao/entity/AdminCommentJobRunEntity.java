@@ -1,4 +1,4 @@
-package com.mark.nevexandrunkeeper.model.entity;
+package com.mark.nevexandrunkeeper.dao.entity;
 
 import java.io.Serializable;
 import java.util.Date;

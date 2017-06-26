@@ -16,6 +16,8 @@ import javax.validation.constraints.NotNull;
 @ConfigurationProperties(prefix = "nevex-and-runkeeper")
 class LocalProperties implements ApplicationProperties{
 
+    @NotNull
+    private Integer userId;
     @Valid
     @NotNull
     private Quotation quotation;
@@ -93,6 +95,18 @@ class LocalProperties implements ApplicationProperties{
         @NotNull
         @NotEmpty
         private String baseUrl;
+        @NotNull
+        @NotEmpty
+        private String clientId;
+        @NotNull
+        @NotEmpty
+        private String clientSecret;
+        @NotNull
+        @NotEmpty
+        private String code;
+        @NotNull
+        @NotEmpty
+        private String accessToken;
 
         @Override
         public String getRedirectHost() {
@@ -138,6 +152,42 @@ class LocalProperties implements ApplicationProperties{
         public void setBaseUrl(String baseUrl) {
             this.baseUrl = baseUrl;
         }
+
+        @Override
+        public String getClientId() {
+            return clientId;
+        }
+
+        public void setClientId(String clientId) {
+            this.clientId = clientId;
+        }
+
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String getAccessToken() {
+            return accessToken;
+        }
+
+        public void setAccessToken(String accessToken) {
+            this.accessToken = accessToken;
+        }
+
+        @Override
+        public String getClientSecret() {
+            return clientSecret;
+        }
+
+        public void setClientSecret(String clientSecret) {
+            this.clientSecret = clientSecret;
+        }
     }
 
     static class Quotation implements ApplicationProperties.Quotation {
@@ -180,5 +230,14 @@ class LocalProperties implements ApplicationProperties{
 
     public void setOauth(OAuth oauth) {
         this.oauth = oauth;
+    }
+
+    @Override
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

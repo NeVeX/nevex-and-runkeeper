@@ -1,6 +1,7 @@
 #service-host-url: https://nevex-and-runkeeper.appspot.com
 
 nevex-and-runkeeper:
+  user-id:
   quotation:
     forismatic-url: http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en
   runkeeper-api:
@@ -11,9 +12,12 @@ nevex-and-runkeeper:
   oauth:
     redirect-host: http://localhost:56787
     redirect-url: ${nevex-and-runkeeper.oauth.redirect-host}/register
-    register-url: https://runkeeper.com/apps/authorize?client_id=${nevex-and-runkeeper.oauth.client-id}&response_type=code&redirect_uri=${oauth.redirect-url}
+    register-url: https://runkeeper.com/apps/authorize?client_id=${nevex-and-runkeeper.oauth.client-id}&response_type=code&redirect_uri=${nevex-and-runkeeper.oauth.redirect-url}
     token_url: ${nevex-and-runkeeper.oauth.base-url}/apps/token
     base-url: https://runkeeper.com
+    client-id:
+    code:
+    access-token:
 
 server:
   port: 56787

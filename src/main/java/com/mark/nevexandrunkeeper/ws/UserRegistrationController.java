@@ -1,7 +1,8 @@
 package com.mark.nevexandrunkeeper.ws;
 
+import com.mark.nevexandrunkeeper.config.ApplicationProperties;
 import com.mark.nevexandrunkeeper.util.APIUtil;
-import com.mark.nevexandrunkeeper.model.entity.UserEntity;
+import com.mark.nevexandrunkeeper.dao.entity.UserEntity;
 import com.mark.nevexandrunkeeper.service.UserRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,13 +25,12 @@ import java.util.Map;
 public class UserRegistrationController {
 
     private final UserRegistrationService userRegistrationService;
-
-    @Value("${oauth.runkeeper-register-url}")
-    private String runKeeperOauthRegisterUrl;
+    private final String runKeeperOauthRegisterUrl;
 
     @Autowired
-    public UserRegistrationController(UserRegistrationService userRegistrationService) {
+    public UserRegistrationController(UserRegistrationService userRegistrationService, ApplicationProperties applicationProperties) {
         this.userRegistrationService = userRegistrationService;
+        this.runKeeperOauthRegisterUrl = applicationProperties.getOauth().getRegisterUrl();
     }
 
     @RequestMapping(value = {"/", "/signup"}, method = RequestMethod.GET)
@@ -40,10 +40,7 @@ public class UserRegistrationController {
     }
 
     @RequestMapping(value = {"/register", "/register/"}, method = RequestMethod.GET)
-    public String registerNewUser( /* @RequestParam(name = "code", required = false) String code, */
-                                         @RequestParam Map<String, String> allRequestParams,
-                                         HttpServletRequest request,
-                                         RedirectAttributes redirectAttributes) {
+    public String registerNewUser(@RequestParam Map<String, String> allRequestParams, RedirectAttributes redirectAttributes) {
         /**
          *
          * So this is fucked up, the RequestParam is not able to grab individual query parameters, but
@@ -57,10 +54,8 @@ public class UserRegistrationController {
         if (StringUtils.isEmpty(code)) {
             return "redirect:/error";
         }
-//        UserRegistration ur = new UserRegistration(code, request.getRequestURL().toString());
         UserEntity ue = userRegistrationService.register(code);
         if ( ue != null ) {
-//        redirectAttributes.addFlashAttribute("oauth_code", code);
             redirectAttributes.addFlashAttribute("unregister_uri", "/unregister?code=" + code);
             redirectAttributes.addFlashAttribute("user", ue);
             return "redirect:/welcome";

@@ -1,10 +1,12 @@
 package com.mark.nevexandrunkeeper.service;
 
+import com.mark.nevexandrunkeeper.config.ApplicationProperties;
 import com.mark.nevexandrunkeeper.util.APIUtil;
 import com.mark.nevexandrunkeeper.exception.RunKeeperException;
 import com.mark.nevexandrunkeeper.model.runkeeper.*;
 import com.mark.nevexandrunkeeper.util.HttpClientUtil;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -21,22 +23,26 @@ public class RunKeeperService {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(RunKeeperService.class.getName());
 
-    @Value("${oauth.client-id}")
-    private String oauthClientId;
-    @Value("${oauth.client-secret}")
-    private String oauthClientSecret;
-    @Value("${oauth.redirect-url}")
-    private String oauthRedirectUrl;
-    @Value("${runkeeper.api.oauth.token}")
-    private String runKeeperApiOauthTokenUrl;
-    @Value("${runkeeper.api.user-url}")
-    private String runKeeperApiUserUrl;
-    @Value("${runkeeper.api.profile-url}")
-    private String runKeeperApiProfileUrl;
-    @Value("${runkeeper.api.fitness-activities-url}")
-    private String runKeeperApiFitnessActivitiesUrl;
-    @Value("${runkeeper.api.base-url}")
-    private String runKeeperApiBaseUrl;
+    private final String oauthClientId;
+    private final String oauthClientSecret;
+    private final String oauthRedirectUrl;
+    private final String runKeeperApiOauthTokenUrl;
+    private final String runKeeperApiUserUrl;
+    private final String runKeeperApiProfileUrl;
+    private final String runKeeperApiFitnessActivitiesUrl;
+    private final String runKeeperApiBaseUrl;
+
+    @Autowired
+    public RunKeeperService(ApplicationProperties applicationProperties) {
+        this.oauthClientId = applicationProperties.getOauth().getClientId();
+        this.oauthClientSecret = applicationProperties.getOauth().getClientSecret();
+        this.oauthRedirectUrl = applicationProperties.getOauth().getRedirectUrl();
+        this.runKeeperApiOauthTokenUrl = applicationProperties.getOauth().getTokenUrl();
+        this.runKeeperApiUserUrl = applicationProperties.getRunKeeperApi().getUserUrl();
+        this.runKeeperApiProfileUrl = applicationProperties.getRunKeeperApi().getProfileUrl();
+        this.runKeeperApiFitnessActivitiesUrl = applicationProperties.getRunKeeperApi().getFitnessActivitiesUrl();
+        this.runKeeperApiBaseUrl = applicationProperties.getRunKeeperApi().getBaseUrl();
+    }
 
     public String getAccessToken(String oauthCode) {
         String url = new StringBuilder()

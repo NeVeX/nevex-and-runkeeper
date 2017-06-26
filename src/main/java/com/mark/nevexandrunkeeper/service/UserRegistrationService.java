@@ -1,8 +1,9 @@
 package com.mark.nevexandrunkeeper.service;
 
+import com.mark.nevexandrunkeeper.config.ApplicationProperties;
 import com.mark.nevexandrunkeeper.model.User;
-import com.mark.nevexandrunkeeper.model.entity.OAuthUserEntity;
-import com.mark.nevexandrunkeeper.model.entity.UserEntity;
+import com.mark.nevexandrunkeeper.dao.entity.OAuthUserEntity;
+import com.mark.nevexandrunkeeper.dao.entity.UserEntity;
 import com.mark.nevexandrunkeeper.model.runkeeper.RunKeeperProfileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,17 +21,20 @@ import java.util.Set;
 @Service
 public class UserRegistrationService {
 
-    @Autowired
-    private RunKeeperService runKeeperService;
+    private final RunKeeperService runKeeperService;
+    private final String oauthClientId;
+    private final String oauthRedirectUrl;
+    private final String applicationAccessToken;
+    private final int applicationUserId;
 
-    @Value("${oauth.client-id}")
-    private String oauthClientId;
-    @Value("${oauth.redirect-url}")
-    private String oauthRedirectUrl;
-    @Value("${application.oauth-access-token}")
-    private String applicationAccessToken;
-    @Value("${application.user-id}")
-    private long applicationUserId;
+    @Autowired
+    public UserRegistrationService(ApplicationProperties applicationProperties, RunKeeperService runKeeperService) {
+        this.oauthClientId = applicationProperties.getOauth().getClientId();
+        this.oauthRedirectUrl = applicationProperties.getOauth().getRedirectUrl();
+        this.applicationAccessToken = applicationProperties.getOauth().getAccessToken();
+        this.applicationUserId = applicationProperties.getUserId();
+        this.runKeeperService = runKeeperService;
+    }
 
     public UserEntity register(String oauthCode) {
         if ( StringUtils.hasText(oauthCode)) {

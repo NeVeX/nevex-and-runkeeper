@@ -8,6 +8,7 @@ public interface ApplicationProperties {
     Quotation getQuotation();
     RunKeeperApi getRunKeeperApi();
     OAuth getOauth();
+    Integer getUserId();
 
     interface OAuth {
         String getRedirectHost();
@@ -15,6 +16,10 @@ public interface ApplicationProperties {
         String getRegisterUrl();
         String getTokenUrl();
         String getBaseUrl();
+        String getClientId();
+        String getClientSecret();
+        String getCode();
+        String getAccessToken();
     }
 
     interface RunKeeperApi {

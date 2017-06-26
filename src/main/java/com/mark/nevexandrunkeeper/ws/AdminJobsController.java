@@ -1,6 +1,6 @@
 package com.mark.nevexandrunkeeper.ws;
 
-import com.mark.nevexandrunkeeper.model.entity.AdminCommentJobRunEntity;
+import com.mark.nevexandrunkeeper.dao.entity.AdminCommentJobRunEntity;
 import com.mark.nevexandrunkeeper.service.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
