@@ -28,7 +28,7 @@ class LocalProperties implements ApplicationProperties{
     @NotNull
     private OAuth oauth;
 
-    static class RunKeeperApi implements ApplicationProperties.RunKeeperApi {
+    public static class RunKeeperApi implements ApplicationProperties.RunKeeperApi {
         @NotNull
         @NotEmpty
         private String baseUrl;
@@ -79,7 +79,7 @@ class LocalProperties implements ApplicationProperties{
         }
     }
 
-    static class OAuth implements ApplicationProperties.OAuth{
+    public static class OAuth implements ApplicationProperties.OAuth {
         @NotNull
         @NotEmpty
         private String redirectHost;
@@ -190,7 +190,7 @@ class LocalProperties implements ApplicationProperties{
         }
     }
 
-    static class Quotation implements ApplicationProperties.Quotation {
+    public static class Quotation implements ApplicationProperties.Quotation {
         @NotNull
         @NotEmpty
         private String forismaticUrl;
@@ -215,11 +215,11 @@ class LocalProperties implements ApplicationProperties{
     }
 
     @Override
-    public RunKeeperApi getRunKeeperApi() {
+    public RunKeeperApi getRunkeeperApi() {
         return runKeeperApi;
     }
 
-    public void setRunKeeperApi(RunKeeperApi runKeeperApi) {
+    public void setRunkeeperApi(RunKeeperApi runKeeperApi) {
         this.runKeeperApi = runKeeperApi;
     }
 

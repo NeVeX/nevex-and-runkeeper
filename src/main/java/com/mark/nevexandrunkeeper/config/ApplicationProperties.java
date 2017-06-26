@@ -6,7 +6,7 @@ package com.mark.nevexandrunkeeper.config;
 public interface ApplicationProperties {
 
     Quotation getQuotation();
-    RunKeeperApi getRunKeeperApi();
+    RunKeeperApi getRunkeeperApi();
     OAuth getOauth();
     Integer getUserId();
 

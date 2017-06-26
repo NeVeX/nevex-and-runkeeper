@@ -11,7 +11,7 @@ public class User implements Serializable {
     private String name;
     private String birthday;
     private String athleteType;
-    private Long userId;
+    private int userId;
     private String accessToken;
     private String gender;
     private String location;
@@ -41,11 +41,11 @@ public class User implements Serializable {
         this.athleteType = athleteType;
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -86,11 +86,11 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return userId != null ? userId.equals(user.userId) : user.userId == null;
+        return userId == user.userId;
     }
 
     @Override
     public int hashCode() {
-        return userId != null ? userId.hashCode() : 0;
+        return userId;
     }
 }

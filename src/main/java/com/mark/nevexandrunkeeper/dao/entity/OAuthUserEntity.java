@@ -1,25 +1,51 @@
 package com.mark.nevexandrunkeeper.dao.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by NeVeX on 7/4/2016.
  */
+@Entity
+@Table(schema = "nevex", name = "OAuthUsers")
 public class OAuthUserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    @Id
+    @Column(name = "Id")
     private int id;
+    @Basic
+    @Column(name = "UserId")
     private int userId;
+    @Basic
+    @Column(name = "Code")
     private String oauthCode;
+    @Basic
+    @Column(name = "CreatedDate")
     private Date createdDate;
+    @Basic
+    @Column(name = "UpdatedDate")
     private Date updatedDate;
+    @Basic
+    @Column(name = "RedirectUrl")
     private String redirectUrl;
+    @Basic
+    @Column(name = "State")
     private String state;
+    @Basic
+    @Column(name = "ClientId")
     private String oauthClientId;
+    @Basic
+    @Column(name = "AccessToken")
     private String accessToken;
+    @Basic
+    @Column(name = "IsFriendRequestSent")
     private boolean isFriendRequestSent;
+    @Basic
+    @Column(name = "IsFriend")
     private boolean isFriend;
+    @Basic
+    @Column(name = "IsActive")
     private boolean isActive;
 
     public boolean isActive() {

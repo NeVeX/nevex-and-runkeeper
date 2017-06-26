@@ -1,13 +1,12 @@
 package com.mark.nevexandrunkeeper.service;
 
 import com.mark.nevexandrunkeeper.config.ApplicationProperties;
-import com.mark.nevexandrunkeeper.util.APIUtil;
 import com.mark.nevexandrunkeeper.exception.RunKeeperException;
 import com.mark.nevexandrunkeeper.model.runkeeper.*;
+import com.mark.nevexandrunkeeper.util.APIUtil;
 import com.mark.nevexandrunkeeper.util.HttpClientUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -38,10 +37,10 @@ public class RunKeeperService {
         this.oauthClientSecret = applicationProperties.getOauth().getClientSecret();
         this.oauthRedirectUrl = applicationProperties.getOauth().getRedirectUrl();
         this.runKeeperApiOauthTokenUrl = applicationProperties.getOauth().getTokenUrl();
-        this.runKeeperApiUserUrl = applicationProperties.getRunKeeperApi().getUserUrl();
-        this.runKeeperApiProfileUrl = applicationProperties.getRunKeeperApi().getProfileUrl();
-        this.runKeeperApiFitnessActivitiesUrl = applicationProperties.getRunKeeperApi().getFitnessActivitiesUrl();
-        this.runKeeperApiBaseUrl = applicationProperties.getRunKeeperApi().getBaseUrl();
+        this.runKeeperApiUserUrl = applicationProperties.getRunkeeperApi().getUserUrl();
+        this.runKeeperApiProfileUrl = applicationProperties.getRunkeeperApi().getProfileUrl();
+        this.runKeeperApiFitnessActivitiesUrl = applicationProperties.getRunkeeperApi().getFitnessActivitiesUrl();
+        this.runKeeperApiBaseUrl = applicationProperties.getRunkeeperApi().getBaseUrl();
     }
 
     public String getAccessToken(String oauthCode) {
@@ -65,7 +64,7 @@ public class RunKeeperService {
         return accessTokenResponse != null ? accessTokenResponse.getAccessToken() : null;
     }
 
-    public Long getUserId(String accessToken) {
+    public Integer getUserId(String accessToken) {
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/vnd.com.runkeeper.User+json");

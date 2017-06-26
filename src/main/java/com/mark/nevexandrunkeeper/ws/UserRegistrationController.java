@@ -1,11 +1,10 @@
 package com.mark.nevexandrunkeeper.ws;
 
 import com.mark.nevexandrunkeeper.config.ApplicationProperties;
-import com.mark.nevexandrunkeeper.util.APIUtil;
-import com.mark.nevexandrunkeeper.dao.entity.UserEntity;
+import com.mark.nevexandrunkeeper.dao.entity.RunKeeperUserEntity;
 import com.mark.nevexandrunkeeper.service.UserRegistrationService;
+import com.mark.nevexandrunkeeper.util.APIUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -54,7 +52,7 @@ public class UserRegistrationController {
         if (StringUtils.isEmpty(code)) {
             return "redirect:/error";
         }
-        UserEntity ue = userRegistrationService.register(code);
+        RunKeeperUserEntity ue = userRegistrationService.register(code);
         if ( ue != null ) {
             redirectAttributes.addFlashAttribute("unregister_uri", "/unregister?code=" + code);
             redirectAttributes.addFlashAttribute("user", ue);
@@ -66,7 +64,7 @@ public class UserRegistrationController {
 
     @RequestMapping(value = "welcome", method = RequestMethod.GET)
     public String welcome(ModelMap model) {
-        UserEntity ue = (UserEntity) model.get("user");
+        RunKeeperUserEntity ue = (RunKeeperUserEntity) model.get("user");
         if ( ue != null ) {
             model.addAttribute("name", ue.getName());
         }

@@ -1,8 +1,9 @@
 package com.mark.nevexandrunkeeper.service;
 
 import com.mark.nevexandrunkeeper.config.ApplicationProperties;
-import com.mark.nevexandrunkeeper.dao.entity.AdminCommentJobRunEntity;
+import com.mark.nevexandrunkeeper.dao.LatestCommentForUserRepository;
 import com.mark.nevexandrunkeeper.dao.entity.CommentJobEntity;
+import com.mark.nevexandrunkeeper.dao.entity.LatestCommentForUserEntity;
 import com.mark.nevexandrunkeeper.model.QuotationResponse;
 import com.mark.nevexandrunkeeper.model.User;
 import com.mark.nevexandrunkeeper.model.runkeeper.RunKeeperFitnessActivityResponse;
@@ -12,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,20 +31,30 @@ public class AdminService {
     private RunKeeperService runKeeperService;
     @Autowired
     private QuotationService quotationService;
-
+    private final LatestCommentForUserRepository latestCommentForUserRepository;
     private final String applicationAccessToken;
 
     @Autowired
-    public AdminService(ApplicationProperties.OAuth oauthProperties) {
-        this.applicationAccessToken = oauthProperties.getAccessToken();
+    public AdminService(ApplicationProperties applicationProperties, LatestCommentForUserRepository latestCommentForUserRepository) {
+        this.applicationAccessToken = applicationProperties.getOauth().getAccessToken();
+        this.latestCommentForUserRepository = latestCommentForUserRepository;
     }
 
-    public AdminCommentJobRunEntity runCommentsJob() {
+    @PostConstruct
+    void init() {
+        LatestCommentForUserEntity entity = new LatestCommentForUserEntity();
+        entity.setLastFitnessId(1234L);
+        entity.setLastSuccessfulRun(new Date());
+        entity.setUserId(111);
+        latestCommentForUserRepository.save(entity);
 
-        long commentsAdded = 0;
-        long activeUsers = 0;
-        long commentsFailed = 0;
-        long commentsIgnored = 0;
+    }
+
+    public CommentJobEntity runCommentsJob() {
+        int commentsAdded = 0;
+        int activeUsers = 0;
+        int commentsFailed = 0;
+        int commentsIgnored = 0;
         long startTime = System.currentTimeMillis();
 
         // Get all the users that are still active
@@ -51,22 +62,23 @@ public class AdminService {
         if ( userRegistrationList != null && !userRegistrationList.isEmpty()) {
             activeUsers = userRegistrationList.size();
             // get the last info for this user
-            List<CommentJobEntity> commentJobEntities = ObjectifyService.ofy().load().type(CommentJobEntity.class).list();
+            Iterable<LatestCommentForUserEntity> commentJobEntities = latestCommentForUserRepository.findAll();
+                    // ObjectifyService.ofy().load().type(LatestCommentForUserEntity.class).list();
 
             for (User u : userRegistrationList) {
 
 
                 try {
-                    CommentJobEntity lastJob = null;
-                    for (CommentJobEntity c : commentJobEntities) {
-                        if (c.getUserId().equals(u.getUserId())) {
+                    LatestCommentForUserEntity lastJob = null;
+                    for (LatestCommentForUserEntity c : commentJobEntities) {
+                        if (c.getUserId() == u.getUserId()) {
                             lastJob = c;
                             break;
                         }
                     }
 
                     if (lastJob == null) {
-                        lastJob = new CommentJobEntity();
+                        lastJob = new LatestCommentForUserEntity();
                         lastJob.setUserId(u.getUserId());
                         lastJob.setLastFitnessId(-1L);
                     }
@@ -83,7 +95,11 @@ public class AdminService {
                                 lastJob.setLastFitnessId(new Long(fitnessId));
                                 lastJob.setUserId(u.getUserId());
                                 lastJob.setLastSuccessfulRun(new Date());
-                                ObjectifyService.ofy().save().entity(lastJob).now();
+//                                ObjectifyService.ofy().save().entity(lastJob).now();
+
+                                latestCommentForUserRepository.save(lastJob); // new way
+
+
                                 commentsAdded++;
                             } else {
                                 commentsFailed++;
@@ -103,14 +119,14 @@ public class AdminService {
         }
         long timeTaken = System.currentTimeMillis() - startTime;
         // save the admin run
-        AdminCommentJobRunEntity ae = new AdminCommentJobRunEntity();
+        CommentJobEntity ae = new CommentJobEntity();
         ae.setActiveUsers(activeUsers);
         ae.setCommentsAdded(commentsAdded);
         ae.setDateRan(new Date());
         ae.setCommentsFailed(commentsFailed);
         ae.setCommentsIgnored(commentsIgnored);
-        ae.setTimeTakenMs(timeTaken);
-        ae.setCommentUsed("**Many quotes per user**");
+        ae.setTimeTakenMs(Long.valueOf(timeTaken).intValue());
+        ae.setCommentUsed("**Many quotes per user**"); // TODO: Save the comment per user
         return ae;
     }
 
