@@ -1,6 +1,5 @@
 package com.mark.nevexandrunkeeper.model.runkeeper;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,6 +12,7 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class RunKeeperAccessTokenResponse implements Serializable {
+
     @JsonProperty("access_token")
     private String accessToken;
     @JsonProperty("token_type")

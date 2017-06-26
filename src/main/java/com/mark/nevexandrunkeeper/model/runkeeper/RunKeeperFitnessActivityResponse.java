@@ -12,6 +12,7 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class RunKeeperFitnessActivityResponse implements Serializable {
+
     @JsonProperty("uri")
     private String uri;
     @JsonProperty("type")

@@ -3,7 +3,6 @@ package com.mark.nevexandrunkeeper.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mark.nevexandrunkeeper.exception.APIException;
 import com.mark.nevexandrunkeeper.exception.RunKeeperException;
-import org.springframework.beans.BeanUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

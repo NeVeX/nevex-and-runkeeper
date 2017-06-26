@@ -1,6 +1,6 @@
 package com.mark.nevexandrunkeeper.ws;
 
-import com.mark.nevexandrunkeeper.APIUtil;
+import com.mark.nevexandrunkeeper.util.APIUtil;
 import com.mark.nevexandrunkeeper.model.entity.UserEntity;
 import com.mark.nevexandrunkeeper.service.UserRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +23,15 @@ import java.util.Map;
 @Controller
 public class UserRegistrationController {
 
-    @Autowired
-    private UserRegistrationService userRegistrationService;
+    private final UserRegistrationService userRegistrationService;
 
     @Value("${oauth.runkeeper-register-url}")
     private String runKeeperOauthRegisterUrl;
+
+    @Autowired
+    public UserRegistrationController(UserRegistrationService userRegistrationService) {
+        this.userRegistrationService = userRegistrationService;
+    }
 
     @RequestMapping(value = {"/", "/signup"}, method = RequestMethod.GET)
     public String getShowResource(Model model) {

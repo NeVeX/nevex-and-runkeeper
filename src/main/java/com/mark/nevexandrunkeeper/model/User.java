@@ -17,9 +17,6 @@ public class User implements Serializable {
     private String location;
     private Date signUpDate;
 
-
-
-
     public String getName() {
         return name;
     }
@@ -88,11 +85,8 @@ public class User implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         User user = (User) o;
-
         return userId != null ? userId.equals(user.userId) : user.userId == null;
-
     }
 
     @Override

@@ -1,10 +1,10 @@
 package com.mark.nevexandrunkeeper.service;
 
-import com.mark.nevexandrunkeeper.APIUtil;
+import com.mark.nevexandrunkeeper.util.APIUtil;
 import com.mark.nevexandrunkeeper.exception.RunKeeperException;
 import com.mark.nevexandrunkeeper.model.runkeeper.*;
 import com.mark.nevexandrunkeeper.util.HttpClientUtil;
-import com.mark.nevexandrunkeeper.ws.AdminJobsController;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -12,7 +12,6 @@ import org.springframework.util.StringUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Created by NeVeX on 7/6/2016.
@@ -20,7 +19,7 @@ import java.util.logging.Logger;
 @Service
 public class RunKeeperService {
 
-    private static final Logger LOGGER = Logger.getLogger(RunKeeperService.class.getName());
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(RunKeeperService.class.getName());
 
     @Value("${oauth.client-id}")
     private String oauthClientId;
@@ -36,8 +35,6 @@ public class RunKeeperService {
     private String runKeeperApiProfileUrl;
     @Value("${runkeeper.api.fitness-activities-url}")
     private String runKeeperApiFitnessActivitiesUrl;
-//    @Value("${runkeeper.api.team-url}")
-//    private String runKeeperApiTeamUrl;
     @Value("${runkeeper.api.base-url}")
     private String runKeeperApiBaseUrl;
 
@@ -72,8 +69,7 @@ public class RunKeeperService {
         try {
             rur = HttpClientUtil.execute(runKeeperApiUserUrl, headers, "GET", RunKeeperUserResponse.class);
         } catch (Exception e ){
-            LOGGER.severe("Something went wrong getting user information from runkeeper api. "+e.getMessage());
-            // nothing for now
+            LOGGER.error("Something went wrong getting user information from runkeeper api. "+e.getMessage());
         }
         return rur != null ? rur.getUserId() : null;
     }
@@ -88,7 +84,7 @@ public class RunKeeperService {
             HttpClientUtil.execute(runKeeperApiBaseUrl + "/team", headers, "POST", invitationRequest, String.class);
             return true;
         } catch (Exception e ) {
-            LOGGER.severe("Something went wrong sent a friend request for token ["+accessToken+"] for userId ["+userId+"] runkeeper api. "+e.getMessage());
+            LOGGER.error("Something went wrong sent a friend request for token ["+accessToken+"] for userId ["+userId+"] runkeeper api. "+e.getMessage());
             return false;
         }
     }
@@ -105,16 +101,15 @@ public class RunKeeperService {
                 if ( response != null && response.getItems() != null && !response.getItems().isEmpty()) {
                     List<RunKeeperFriendsReplyResponse> friends = response.getItems();
                     for ( RunKeeperFriendsReplyResponse f : friends) {
-                        if ( f.getUserId() != null && f.getUserId().equals(userId)
-                               /* && f.getReply() != null && f.getReply().toLowerCase().equals("accepted") */ ) { // reply is empty even though the api says it should now
-                             // FRRIEENNNNNDD!!!
+                        if ( f.getUserId() != null && f.getUserId().equals(userId)) {
+                            // FRRIEENNNNNDD!!!
                             return true;
                         }
                     }
                     // see if we have more friends
                     if ( StringUtils.hasText(response.getNextUri())) {
                         urlToInvoke = runKeeperApiBaseUrl + response.getNextUri();
-                        LOGGER.warning("Did not find friends in request but there are more friends to check - using the uri next ["+urlToInvoke+"]");
+                        LOGGER.warn("Did not find friends in request but there are more friends to check - using the uri next ["+urlToInvoke+"]");
                     } else {
                         stillMoreFriendsToTry = false;
                     }
@@ -125,7 +120,7 @@ public class RunKeeperService {
             }
 
         } catch (Exception e ) {
-            LOGGER.severe("Something went wrong determining if token ["+accessToken+"] is a friend of userId ["+userId+"] using the runkeeper api. "+e.getMessage());
+            LOGGER.error("Something went wrong determining if token ["+accessToken+"] is a friend of userId ["+userId+"] using the runkeeper api. "+e.getMessage());
 
         }
         return false;
@@ -140,8 +135,7 @@ public class RunKeeperService {
         try {
             rpr = HttpClientUtil.execute(runKeeperApiProfileUrl, headers, "GET", RunKeeperProfileResponse.class);
         } catch (Exception e ) {
-            LOGGER.severe("Something went wrong getting profile information from runkeeper api. "+e.getMessage());
-            // nothing for now
+            LOGGER.error("Something went wrong getting profile information from runkeeper api. "+e.getMessage());
         }
         return rpr;
     }
@@ -159,8 +153,7 @@ public class RunKeeperService {
                 rpr = listResponse.getItems().get(0);
             }
         } catch (Exception e ) {
-            LOGGER.severe("Something went wrong getting last fitness info information from runkeeper api. "+e.getMessage());
-            // nothing for now
+            LOGGER.error("Something went wrong getting last fitness info information from runkeeper api. "+e.getMessage());
         }
         return rpr;
     }
@@ -177,8 +170,7 @@ public class RunKeeperService {
             HttpClientUtil.execute(runKeeperApiFitnessActivitiesUrl + "/" + fitnessId + "/comments", headers, "POST", request, null);
             return true;
         } catch (Exception e ) {
-            LOGGER.severe("Something went wrong sending a comment to the runkeeper api. "+e.getMessage());
-            // nothing for now
+            LOGGER.error("Something went wrong sending a comment to the runkeeper api. "+e.getMessage());
             return false;
         }
     }

@@ -1,4 +1,4 @@
-package com.mark.nevexandrunkeeper;
+package com.mark.nevexandrunkeeper.util;
 
 import java.net.URLEncoder;
 import java.util.Map;
@@ -18,6 +18,5 @@ public class APIUtil {
         } catch (Exception e ) {
             return "";
         }
-
     }
 }

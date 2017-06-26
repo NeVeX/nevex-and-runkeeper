@@ -1,34 +1,35 @@
 package com.mark.nevexandrunkeeper.model.entity;
 
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by NeVeX on 7/11/2016.
  */
-@Entity
 public class UserEntity implements Serializable {
-    @Id
-    private Long userId;
+    private static final long serialVersionUID = 1L;
+
+    private int userId;
     private String name;
     private String location;
-    private String gender;
+    private char gender;
     private String birthday;
     private Date signUpDate;
     private String athleteType;
 
-    public UserEntity() {
-        this.signUpDate = new Date();
+    public String getAthleteType() {
+        return athleteType;
     }
 
-    public Long getUserId() {
+    public void setAthleteType(String athleteType) {
+        this.athleteType = athleteType;
+    }
+
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -48,11 +49,11 @@ public class UserEntity implements Serializable {
         this.location = location;
     }
 
-    public String getGender() {
+    public char getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(char gender) {
         this.gender = gender;
     }
 
@@ -72,11 +73,16 @@ public class UserEntity implements Serializable {
         this.signUpDate = signUpDate;
     }
 
-    public String getAthleteType() {
-        return athleteType;
-    }
-
-    public void setAthleteType(String athleteType) {
-        this.athleteType = athleteType;
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "userId=" + userId +
+                ", name='" + name + '\'' +
+                ", location='" + location + '\'' +
+                ", gender=" + gender +
+                ", birthday='" + birthday + '\'' +
+                ", signUpDate=" + signUpDate +
+                ", athleteType='" + athleteType + '\'' +
+                '}';
     }
 }

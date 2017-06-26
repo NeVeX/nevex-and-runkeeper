@@ -2,10 +2,10 @@ package com.mark.nevexandrunkeeper.service;
 
 import com.mark.nevexandrunkeeper.model.QuotationResponse;
 import com.mark.nevexandrunkeeper.util.HttpClientUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.logging.Logger;
 
 /**
  * Created by NeVeX on 7/13/2016.
@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 @Service
 public class QuotationService {
 
-    private static final Logger LOGGER = Logger.getLogger(QuotationService.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuotationService.class.getName());
 
     @Value("${quotation.url}")
     private String quotationUrl;
@@ -25,7 +25,6 @@ public class QuotationService {
         DEFAULT_QUOTE.setAuthor("NeVeX");
         DEFAULT_QUOTE.setText("Well done - so proud of you! Keep it up! :-)");
     }
-
 
     public QuotationResponse getQuote() {
         for ( int i = 0; i < 3; i++) {
@@ -41,7 +40,7 @@ public class QuotationService {
         try {
             return HttpClientUtil.execute(quotationUrl, null, "GET", QuotationResponse.class);
         } catch (Exception e ) {
-            LOGGER.severe("There was a problem contacting the quotation service ["+quotationUrl+"]. Error: "+e.getMessage());
+            LOGGER.error("There was a problem contacting the quotation service ["+quotationUrl+"]. Error: "+e.getMessage());
         }
         return null;
     }

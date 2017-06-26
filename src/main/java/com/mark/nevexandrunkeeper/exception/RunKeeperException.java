@@ -1,17 +1,18 @@
 package com.mark.nevexandrunkeeper.exception;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by NeVeX on 7/11/2016.
  */
-public class RunKeeperException extends Exception {
+public final class RunKeeperException extends Exception {
 
-    private static final Logger LOGGER = Logger.getLogger(RunKeeperException.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(RunKeeperException.class.getName());
 
     public RunKeeperException(String msg) {
         super(msg);
-        LOGGER.warning(msg);
+        LOGGER.error(msg);
     }
 
 }

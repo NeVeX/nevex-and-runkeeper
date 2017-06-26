@@ -1,7 +1,5 @@
 package com.mark.nevexandrunkeeper.service;
 
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.ObjectifyService;
 import com.mark.nevexandrunkeeper.model.User;
 import com.mark.nevexandrunkeeper.model.entity.OAuthUserEntity;
 import com.mark.nevexandrunkeeper.model.entity.UserEntity;
@@ -44,16 +42,10 @@ public class UserRegistrationService {
             oAuthUserEntityToSave.setOauthClientId(oauthClientId); // save the client id used for this
             oAuthUserEntityToSave.setActive(true);
 
-//            Key<OAuthUserEntity> result = ObjectifyService.ofy().save().entity(oAuthUserEntityToSave).now();
-
-//            OAuthUserEntity savedEntity = ObjectifyService.ofy().load().key(result).now();
-
             // try and save the access token
             String accessToken = runKeeperService.getAccessToken(oAuthUserEntityToSave.getOauthCode());
             if ( StringUtils.hasText(accessToken)) {
                 oAuthUserEntityToSave.setAccessToken(accessToken);
-//                ObjectifyService.ofy().save().entity(savedEntity).now();
-
                 // get user information now
                 Long userId = runKeeperService.getUserId(accessToken);
 
@@ -91,8 +83,6 @@ public class UserRegistrationService {
                         userEntityToSave.setLocation(profile.getLocation());
                         userEntityToSave.setName(profile.getName());
 
-                        // Now we need to become friends with this person
-//                        Long applicationUserId = runKeeperService.getUserId(applicationAccessToken);
                         // add application to the friends of this user
                         boolean requestSent = runKeeperService.sendFriendRequest(accessToken, applicationUserId);
 

@@ -1,38 +1,41 @@
 package com.mark.nevexandrunkeeper.model.entity;
 
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
-
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by NeVeX on 7/12/2016.
  */
-@Entity
 public class CommentJobEntity implements Serializable {
-    @Id
-    private Long id;
-    @Index
-    private Long userId;
+    private static final long serialVersionUID = 1L;
+
+    private int id;
+    private int userId;
     private Date lastSuccessfulRun;
     private Long lastFitnessId;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public Date getLastSuccessfulRun() {
+        return lastSuccessfulRun;
+    }
+
+    public void setLastSuccessfulRun(Date lastSuccessfulRun) {
+        this.lastSuccessfulRun = lastSuccessfulRun;
     }
 
     public Long getLastFitnessId() {
@@ -43,11 +46,13 @@ public class CommentJobEntity implements Serializable {
         this.lastFitnessId = lastFitnessId;
     }
 
-    public Date getLastSuccessfulRun() {
-        return lastSuccessfulRun;
-    }
-
-    public void setLastSuccessfulRun(Date lastSuccessfulRun) {
-        this.lastSuccessfulRun = lastSuccessfulRun;
+    @Override
+    public String toString() {
+        return "CommentJobEntity{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", lastSuccessfulRun=" + lastSuccessfulRun +
+                ", lastFitnessId=" + lastFitnessId +
+                '}';
     }
 }
