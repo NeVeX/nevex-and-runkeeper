@@ -1,25 +1,24 @@
--- Table: nevex."CommentJobs"
+-- Table: nevex.comment_jobs
 
--- DROP TABLE nevex."CommentJobs";
+-- DROP TABLE nevex.comment_jobs;
 
-CREATE TABLE nevex."CommentJobs"
+CREATE TABLE nevex.comment_jobs
 (
-    "Id" integer NOT NULL DEFAULT nextval('nevex."CommentJobs_Id_seq"'::regclass),
-    "DateRan" time with time zone NOT NULL,
-    "TimeTakenMs" integer NOT NULL,
-    "ActiveUsers" integer NOT NULL,
-    "CommentsAdded" integer NOT NULL,
-    "CommentsFailed" integer NOT NULL,
-    "CommentsIgnored" integer NOT NULL,
-    "CommentUsed" character varying COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "CommentJobs_pkey" PRIMARY KEY ("Id")
+    id serial NOT NULL,
+    date_ran timestamp with time zone NOT NULL,
+    time_taken_ms integer NOT NULL,
+    active_users integer NOT NULL,
+    comments_added integer NOT NULL,
+    comments_failed integer NOT NULL,
+    comments_ignored integer NOT NULL,
+    comment_used character varying NOT NULL,
+    PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE
-)
-TABLESPACE pg_default;
+);
 
-ALTER TABLE nevex."CommentJobs"
+ALTER TABLE nevex.comment_jobs
     OWNER to postgres;
-COMMENT ON TABLE nevex."CommentJobs"
+COMMENT ON TABLE nevex.comment_jobs
     IS 'Record of all the comment jobs that ran';

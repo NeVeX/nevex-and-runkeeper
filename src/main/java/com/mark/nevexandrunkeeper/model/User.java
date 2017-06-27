@@ -9,7 +9,7 @@ import java.util.Date;
 public class User implements Serializable {
 
     private String name;
-    private String birthday;
+    private Date birthday;
     private String athleteType;
     private int userId;
     private String accessToken;
@@ -25,11 +25,11 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public String getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
@@ -92,5 +92,19 @@ public class User implements Serializable {
     @Override
     public int hashCode() {
         return userId;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", birthday=" + birthday +
+                ", athleteType='" + athleteType + '\'' +
+                ", userId=" + userId +
+                ", accessToken='" + accessToken + '\'' +
+                ", gender='" + gender + '\'' +
+                ", location='" + location + '\'' +
+                ", signUpDate=" + signUpDate +
+                '}';
     }
 }

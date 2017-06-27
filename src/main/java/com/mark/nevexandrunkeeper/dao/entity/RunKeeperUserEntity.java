@@ -2,39 +2,36 @@ package com.mark.nevexandrunkeeper.dao.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
+import java.sql.Date;
 
 /**
  * Created by NeVeX on 7/11/2016.
  */
 @Entity
-@Table(schema = "nevex", name = "RunKeeperUsers")
+@Table(schema = "nevex", name = "runkeeper_users")
 public class RunKeeperUserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "Id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
-    @Basic
-    @Column(name = "UserId")
+    @Column(name = "user_id")
     private int userId;
-    @Basic
-    @Column(name = "Name")
+    @Column(name = "created_date")
+    private Timestamp createdDate;
+    @Column(name = "name")
     private String name;
-    @Basic
-    @Column(name = "Location")
+    @Column(name = "location")
     private String location;
-    @Basic
-    @Column(name = "Gender")
+    @Column(name = "gender")
     private String gender;
-    @Basic
-    @Column(name = "Birthday")
-    private String birthday;
-    @Basic
-    @Column(name = "SignUpDate")
+    @Column(name = "birthday")
+    private Date birthday;
+    @Column(name = "sign_up_date")
     private Date signUpDate;
-    @Basic
-    @Column(name = "AthleteType")
+    @Column(name = "athlete_type")
     private String athleteType;
 
     public int getId() {
@@ -85,11 +82,11 @@ public class RunKeeperUserEntity implements Serializable {
         this.gender = gender;
     }
 
-    public String getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
@@ -101,11 +98,20 @@ public class RunKeeperUserEntity implements Serializable {
         this.signUpDate = signUpDate;
     }
 
+    public Timestamp getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
+
     @Override
     public String toString() {
         return "RunKeeperUserEntity{" +
                 "id=" + id +
                 "userId=" + userId +
+                ", createdDate=" + createdDate +
                 ", name='" + name + '\'' +
                 ", location='" + location + '\'' +
                 ", gender=" + gender +

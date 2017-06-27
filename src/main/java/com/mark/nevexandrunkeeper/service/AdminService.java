@@ -8,12 +8,14 @@ import com.mark.nevexandrunkeeper.model.QuotationResponse;
 import com.mark.nevexandrunkeeper.model.User;
 import com.mark.nevexandrunkeeper.model.runkeeper.RunKeeperFitnessActivityResponse;
 import com.mark.nevexandrunkeeper.service.quotes.QuotationService;
+import com.mark.nevexandrunkeeper.util.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Set;
 
@@ -44,9 +46,10 @@ public class AdminService {
     void init() {
         LatestCommentForUserEntity entity = new LatestCommentForUserEntity();
         entity.setLastFitnessId(1234L);
-        entity.setLastSuccessfulRun(new Date());
+        entity.setLastCommentAddedDate(TimeUtils.utcNow());
         entity.setUserId(111);
-        latestCommentForUserRepository.save(entity);
+        LatestCommentForUserEntity saved = latestCommentForUserRepository.save(entity);
+        saved.toString();
 
     }
 
@@ -94,7 +97,7 @@ public class AdminService {
                             if (success) {
                                 lastJob.setLastFitnessId(new Long(fitnessId));
                                 lastJob.setUserId(u.getUserId());
-                                lastJob.setLastSuccessfulRun(new Date());
+                                lastJob.setLastCommentAddedDate(TimeUtils.utcNow());
 //                                ObjectifyService.ofy().save().entity(lastJob).now();
 
                                 latestCommentForUserRepository.save(lastJob); // new way
@@ -122,7 +125,7 @@ public class AdminService {
         CommentJobEntity ae = new CommentJobEntity();
         ae.setActiveUsers(activeUsers);
         ae.setCommentsAdded(commentsAdded);
-        ae.setDateRan(new Date());
+        ae.setDateRan(TimeUtils.utcNow());
         ae.setCommentsFailed(commentsFailed);
         ae.setCommentsIgnored(commentsIgnored);
         ae.setTimeTakenMs(Long.valueOf(timeTaken).intValue());

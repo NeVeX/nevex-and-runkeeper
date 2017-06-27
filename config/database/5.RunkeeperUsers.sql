@@ -1,25 +1,25 @@
--- Table: nevex."RunkeeperUsers"
+-- Table: nevex.runkeeper_users
 
--- DROP TABLE nevex."RunkeeperUsers";
+-- DROP TABLE nevex.runkeeper_users;
 
-CREATE TABLE nevex."RunkeeperUsers"
+CREATE TABLE nevex.runkeeper_users
 (
-    "Id" integer NOT NULL DEFAULT nextval('nevex."RunkeeperUsers_Id_seq"'::regclass),
-    "UserId" integer NOT NULL,
-    "Name" character varying COLLATE pg_catalog."default" NOT NULL,
-    "Location" character varying COLLATE pg_catalog."default",
-    "Gender" character varying COLLATE pg_catalog."default",
-    "Birthday" date,
-    "SignUpDate" date NOT NULL,
-    "AthleteType" character varying COLLATE pg_catalog."default",
-    CONSTRAINT "RunkeeperUsers_pkey" PRIMARY KEY ("Id")
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    created_date timestamp with time zone NOT NULL,
+    name character varying NOT NULL,
+    location character varying,
+    gender character varying,
+    birthday date,
+    sign_up_date date NOT NULL,
+    athlete_type character varying,
+    PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE
-)
-TABLESPACE pg_default;
+);
 
-ALTER TABLE nevex."RunkeeperUsers"
+ALTER TABLE nevex.runkeeper_users
     OWNER to postgres;
-COMMENT ON TABLE nevex."RunkeeperUsers"
+COMMENT ON TABLE nevex.runkeeper_users
     IS 'The users we will use in the service';

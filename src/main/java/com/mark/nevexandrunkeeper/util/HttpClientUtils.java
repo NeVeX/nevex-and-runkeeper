@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Created by NeVeX on 7/13/2016.
  */
-public class HttpClientUtil {
+public class HttpClientUtils {
 
     private final static ObjectMapper OM = new ObjectMapper();
 

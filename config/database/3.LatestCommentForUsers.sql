@@ -1,21 +1,20 @@
--- Table: nevex."LatestCommentForUsers"
+-- Table: nevex.latest_comment_for_users
 
--- DROP TABLE nevex."LatestCommentForUsers";
+-- DROP TABLE nevex.latest_comment_for_users;
 
-CREATE TABLE nevex."LatestCommentForUsers"
+CREATE TABLE nevex.latest_comment_for_users
 (
-    "Id" integer NOT NULL DEFAULT nextval('nevex."LatestCommentForUsers_Id_seq"'::regclass),
-    "UserId" integer NOT NULL,
-    "LastCommentAdded" time with time zone NOT NULL,
-    "LastFitnessId" bigint NOT NULL,
-    CONSTRAINT "LatestCommentForUsers_pkey" PRIMARY KEY ("UserId")
+    id serial NOT NULL,
+    user_id integer NOT NULL,
+    last_comment_added_date timestamp with time zone NOT NULL,
+    last_fitness_id bigint NOT NULL,
+    PRIMARY KEY (user_id)
 )
 WITH (
     OIDS = FALSE
-)
-TABLESPACE pg_default;
+);
 
-ALTER TABLE nevex."LatestCommentForUsers"
+ALTER TABLE nevex.latest_comment_for_users
     OWNER to postgres;
-COMMENT ON TABLE nevex."LatestCommentForUsers"
+COMMENT ON TABLE nevex.latest_comment_for_users
     IS 'Tracks the latest comment left for users';

@@ -2,50 +2,43 @@ package com.mark.nevexandrunkeeper.dao.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 /**
  * Created by NeVeX on 7/4/2016.
  */
 @Entity
-@Table(schema = "nevex", name = "OAuthUsers")
+@Table(schema = "nevex", name = "oauth_users")
 public class OAuthUserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
-    @Column(name = "Id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
-    @Basic
-    @Column(name = "UserId")
+    @Column(name = "user_id")
     private int userId;
-    @Basic
-    @Column(name = "Code")
+    @Column(name = "code")
     private String oauthCode;
-    @Basic
-    @Column(name = "CreatedDate")
-    private Date createdDate;
-    @Basic
-    @Column(name = "UpdatedDate")
-    private Date updatedDate;
-    @Basic
-    @Column(name = "RedirectUrl")
+    @Column(name = "created_date")
+    private Timestamp createdDate;
+    @Column(name = "updated_date")
+    private Timestamp updatedDate;
+    @Column(name = "redirect_url")
     private String redirectUrl;
-    @Basic
-    @Column(name = "State")
+    @Column(name = "state")
     private String state;
-    @Basic
-    @Column(name = "ClientId")
+    @Column(name = "client_id")
     private String oauthClientId;
-    @Basic
-    @Column(name = "AccessToken")
+    @Column(name = "access_token")
     private String accessToken;
-    @Basic
-    @Column(name = "IsFriendRequestSent")
+    @Column(name = "is_friend_request_sent")
     private boolean isFriendRequestSent;
-    @Basic
-    @Column(name = "IsFriend")
+    @Column(name = "is_friend")
     private boolean isFriend;
-    @Basic
-    @Column(name = "IsActive")
+    @Column(name = "is_active")
     private boolean isActive;
 
     public boolean isActive() {
@@ -80,19 +73,19 @@ public class OAuthUserEntity implements Serializable {
         this.oauthCode = oauthCode;
     }
 
-    public Date getCreatedDate() {
+    public Timestamp getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Date getUpdatedDate() {
+    public Timestamp getUpdatedDate() {
         return updatedDate;
     }
 
-    public void setUpdatedDate(Date updatedDate) {
+    public void setUpdatedDate(Timestamp updatedDate) {
         this.updatedDate = updatedDate;
     }
 

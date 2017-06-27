@@ -2,27 +2,26 @@ package com.mark.nevexandrunkeeper.dao.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 
 /**
  * Created by NeVeX on 7/12/2016.
  */
 @Entity
-@Table(schema = "nevex", name = "LatestCommentForUsers")
+@Table(schema = "nevex", name = "latest_comment_for_users")
 public class LatestCommentForUserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "Id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
-    @Basic
-    @Column(name = "UserId")
+    @Column(name = "user_id")
     private int userId;
-    @Basic
-    @Column(name = "LastCommentAdded")
-    private Date lastSuccessfulRun;
-    @Basic
-    @Column(name = "LastFitnessId")
+    @Column(name = "last_comment_added_date")
+    private Timestamp lastCommentAddedDate;
+    @Column(name = "last_fitness_id")
     private Long lastFitnessId;
 
     public int getId() {
@@ -41,12 +40,12 @@ public class LatestCommentForUserEntity implements Serializable {
         this.userId = userId;
     }
 
-    public Date getLastSuccessfulRun() {
-        return lastSuccessfulRun;
+    public Timestamp getLastCommentAddedDate() {
+        return lastCommentAddedDate;
     }
 
-    public void setLastSuccessfulRun(Date lastSuccessfulRun) {
-        this.lastSuccessfulRun = lastSuccessfulRun;
+    public void setLastCommentAddedDate(Timestamp lastCommentAddedDate) {
+        this.lastCommentAddedDate = lastCommentAddedDate;
     }
 
     public Long getLastFitnessId() {
@@ -62,7 +61,7 @@ public class LatestCommentForUserEntity implements Serializable {
         return "LatestCommentForUserEntity{" +
                 "id=" + id +
                 ", userId=" + userId +
-                ", lastSuccessfulRun=" + lastSuccessfulRun +
+                ", lastCommentAddedDate=" + lastCommentAddedDate +
                 ", lastFitnessId=" + lastFitnessId +
                 '}';
     }

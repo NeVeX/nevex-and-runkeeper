@@ -3,7 +3,7 @@ package com.mark.nevexandrunkeeper.ws;
 import com.mark.nevexandrunkeeper.config.ApplicationProperties;
 import com.mark.nevexandrunkeeper.dao.entity.RunKeeperUserEntity;
 import com.mark.nevexandrunkeeper.service.UserRegistrationService;
-import com.mark.nevexandrunkeeper.util.APIUtil;
+import com.mark.nevexandrunkeeper.util.APIUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,7 +47,7 @@ public class UserRegistrationController {
          *
          *
          */
-        String code = APIUtil.getString(allRequestParams, "code");
+        String code = APIUtils.getString(allRequestParams, "code");
 
         if (StringUtils.isEmpty(code)) {
             return "redirect:/error";
@@ -73,7 +73,7 @@ public class UserRegistrationController {
 
     @RequestMapping(value = "unregister", method = RequestMethod.GET)
     public String unregister(@RequestParam Map<String, String> allRequestParams) {
-        String code = APIUtil.getString(allRequestParams, "code");
+        String code = APIUtils.getString(allRequestParams, "code");
         if ( StringUtils.hasText(code)) {
             userRegistrationService.unregister(code);
         }

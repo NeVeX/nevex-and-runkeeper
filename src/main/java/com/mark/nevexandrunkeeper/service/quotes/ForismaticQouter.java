@@ -2,7 +2,7 @@ package com.mark.nevexandrunkeeper.service.quotes;
 
 import com.mark.nevexandrunkeeper.config.ApplicationProperties;
 import com.mark.nevexandrunkeeper.model.QuotationResponse;
-import com.mark.nevexandrunkeeper.util.HttpClientUtil;
+import com.mark.nevexandrunkeeper.util.HttpClientUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ class ForismaticQouter implements Quoter {
     public Optional<QuotationResponse> getQuote() {
         QuotationResponse response = null;
         try {
-            response = HttpClientUtil.execute(quotationUrl, null, "GET", QuotationResponse.class);
+            response = HttpClientUtils.execute(quotationUrl, null, "GET", QuotationResponse.class);
         } catch (Exception e ) {
             LOGGER.error("There was a problem contacting the Forismatic quotation API [{}]. Error message: [{}]", quotationUrl, e.getMessage());
         }

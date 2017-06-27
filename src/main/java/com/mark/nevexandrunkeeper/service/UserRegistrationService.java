@@ -7,10 +7,15 @@ import com.mark.nevexandrunkeeper.dao.entity.OAuthUserEntity;
 import com.mark.nevexandrunkeeper.dao.entity.RunKeeperUserEntity;
 import com.mark.nevexandrunkeeper.model.User;
 import com.mark.nevexandrunkeeper.model.runkeeper.RunKeeperProfileResponse;
+import com.mark.nevexandrunkeeper.util.RunKeeperUtils;
+import com.mark.nevexandrunkeeper.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.sql.Timestamp;
+import java.time.Clock;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 /**
@@ -45,7 +50,7 @@ public class UserRegistrationService {
         if ( StringUtils.hasText(oauthCode)) {
 
             OAuthUserEntity oAuthUserEntityToSave = new OAuthUserEntity();
-            oAuthUserEntityToSave.setCreatedDate(new Date());
+            oAuthUserEntityToSave.setCreatedDate(TimeUtils.utcNow());
             oAuthUserEntityToSave.setOauthCode(oauthCode);
             oAuthUserEntityToSave.setRedirectUrl(oauthRedirectUrl);
             oAuthUserEntityToSave.setOauthClientId(oauthClientId); // save the client id used for this
@@ -69,7 +74,7 @@ public class UserRegistrationService {
                         for (OAuthUserEntity e : existingSignUps ) {
                             if ( e.isActive() ) {
                                 e.setActive(false);
-                                e.setUpdatedDate(new Date());
+                                e.setUpdatedDate(TimeUtils.utcNow());
 //                                ObjectifyService.ofy().save().entity(e).now();
                                 oAuthUsersRepository.save(e);
                             }
@@ -90,7 +95,12 @@ public class UserRegistrationService {
                         }
                         runKeeperUserEntityToSave.setAthleteType(profile.getAthleteType());
                         runKeeperUserEntityToSave.setUserId(userId);
-                        runKeeperUserEntityToSave.setBirthday(profile.getBirthday());
+                        runKeeperUserEntityToSave.setCreatedDate(TimeUtils.utcNow());
+
+                        Optional<Date> birthDateOptional = RunKeeperUtils.parseBirthdayDate(profile.getBirthday());
+                        if ( birthDateOptional.isPresent() ) {
+                            runKeeperUserEntityToSave.setBirthday(new java.sql.Date(birthDateOptional.get().getTime()));
+                        }
 
                         runKeeperUserEntityToSave.setGender(profile.getGender());
                         runKeeperUserEntityToSave.setLocation(profile.getLocation());
@@ -134,7 +144,7 @@ public class UserRegistrationService {
             if ( registeredCodes != null && !registeredCodes.isEmpty()) {
                 // de-activate each one
                 for ( OAuthUserEntity entity : registeredCodes ) {
-                    entity.setUpdatedDate(new Date());
+                    entity.setUpdatedDate(TimeUtils.utcNow());
                     entity.setActive(false);
 //                    ObjectifyService.ofy().save().entity(entity).now();
                     oAuthUsersRepository.save(entity);

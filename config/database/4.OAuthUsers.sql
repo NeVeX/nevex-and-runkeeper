@@ -1,29 +1,28 @@
--- Table: nevex."OAuthUsers"
+-- Table: nevex.oauth_users
 
--- DROP TABLE nevex."OAuthUsers";
+-- DROP TABLE nevex.oauth_users;
 
-CREATE TABLE nevex."OAuthUsers"
+CREATE TABLE nevex.oauth_users
 (
-    "Id" integer NOT NULL DEFAULT nextval('nevex."OAuthUsers_Id_seq"'::regclass),
-    "UserId" integer,
-    "Code" character varying COLLATE pg_catalog."default" NOT NULL,
-    "CreatedDate" time with time zone NOT NULL,
-    "UpdatedDate" time with time zone,
-    "RedirectUrl" character varying COLLATE pg_catalog."default",
-    "State" character varying COLLATE pg_catalog."default",
-    "ClientId" character varying COLLATE pg_catalog."default",
-    "AccessToken" character varying COLLATE pg_catalog."default",
-    "IsFriendRequestSent" boolean NOT NULL,
-    "IsFriend" boolean NOT NULL,
-    "IsActive" boolean NOT NULL,
-    CONSTRAINT "OAuthUsers_pkey" PRIMARY KEY ("Id")
+    Id serial NOT NULL,
+    user_id integer,
+    code character varying NOT NULL,
+    created_date timestamp with time zone NOT NULL,
+    updated_date timestamp with time zone,
+    redirect_url character varying,
+    state character varying,
+    client_id character varying,
+    access_token character varying,
+    is_friend_request_sent boolean NOT NULL,
+    is_friend boolean NOT NULL,
+    is_active boolean NOT NULL,
+    PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE
-)
-TABLESPACE pg_default;
+);
 
-ALTER TABLE nevex."OAuthUsers"
+ALTER TABLE nevex.oauth_users
     OWNER to postgres;
-COMMENT ON TABLE nevex."OAuthUsers"
+COMMENT ON TABLE nevex.oauth_users
     IS 'The information about each user with oauth';

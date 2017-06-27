@@ -2,39 +2,35 @@ package com.mark.nevexandrunkeeper.dao.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.OffsetDateTime;
 
 /**
  * Created by NeVeX on 7/12/2016.
  */
 @Entity
-@Table(schema = "nevex", name = "CommentJobs")
+@Table(schema = "nevex", name = "comment_jobs")
 public class CommentJobEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "Id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
-    @Basic
-    @Column(name = "DateRan")
-    private Date dateRan;
-    @Basic
-    @Column(name = "TimeTakenMs")
+    @Column(name = "date_ran")
+    private Timestamp dateRan;
+    @Column(name = "time_taken_ms")
     private int timeTakenMs;
-    @Basic
-    @Column(name = "CommentsAdded")
+    @Column(name = "comments_added")
     private int commentsAdded;
-    @Basic
-    @Column(name = "ActiveUsers")
+    @Column(name = "active_users")
     private int activeUsers;
-    @Basic
-    @Column(name = "CommentsFailed")
+    @Column(name = "comments_failed")
     private int commentsFailed;
-    @Basic
-    @Column(name = "CommentsIgnored")
+    @Column(name = "comments_ignored")
     private int commentsIgnored;
-    @Basic
-    @Column(name = "CommentUsed")
+    @Column(name = "comment_used")
     private String commentUsed;
 
     public int getId() {
@@ -45,12 +41,12 @@ public class CommentJobEntity implements Serializable {
         this.id = id;
     }
 
-    public Date getDateRan() {
+    public Timestamp getDateRan() {
         return dateRan;
     }
 
-    public void setDateRan(Date dateRan) {
-        this.dateRan = dateRan;
+    public void setDateRan(Timestamp timestamp) {
+        this.dateRan = timestamp;
     }
 
     public int getTimeTakenMs() {

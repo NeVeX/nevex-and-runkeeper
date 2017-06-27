@@ -4,6 +4,7 @@
 ### https://runkeeper.com/partner/applications/keysAndURLs?clientID=51407cdf5a9344bf8cdeb4cd6bf00e39
 nevex-and-runkeeper:
   ## REMOVE THE USER ID FROM GIT!
+  user-id: 52392006
   quotation:
     forismatic-url: http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en
   runkeeper-api:
@@ -17,7 +18,11 @@ nevex-and-runkeeper:
     register-url: https://runkeeper.com/apps/authorize?client_id=${nevex-and-runkeeper.oauth.client-id}&response_type=code&redirect_uri=${nevex-and-runkeeper.oauth.redirect-url}
     token_url: ${nevex-and-runkeeper.oauth.base-url}/apps/token
     base-url: https://runkeeper.com
-
+    ### REMOVE ALL OF THE BELOW!!!
+    client-id: 51407cdf5a9344bf8cdeb4cd6bf00e39
+    client-secret: 9e7f5d2fe3d24d92a35016732eaa7a48
+    code: eyJkYXRhIjp7InIiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvcmVnaXN0ZXIiLCJjIjoiNTE0MDdjZGY1YTkzNDRiZjhjZGViNGNkNmJmMDBlMzkiLCJ0IjoxNDY4OTk3MzU1ODQ1LCJ1Ijo1MjM5MjAwNn0sIm1hYyI6IjFlWXJ4ZWxrQ3RVcm1tTDN3TG5uMEJIekNMZ2s0NmxqOGkvYUJXU2k3WnM9In0
+    access-token: 2bd0056be8be4bd48b8cbe835dd85bd3
 
 server:
   port: 56787
@@ -34,12 +39,12 @@ spring:
 
 spring.jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.show-sql: false
-#spring.jpa.hibernate.ddl-auto = create-drop
+spring.jpa.hibernate.ddl-auto: validate #auto-drop
 #spring.jpa.hibernate.naming.physical-strategy: org.hibernate.‌​boot.model.naming.Ph‌​ysicalNamingStrategy‌​StandardImpl
 spring.jpa.hibernate.naming.implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
 spring.jpa.hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 #spring.jpa.hibernate.naming.implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
-spring.jpa.hibernate.naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
+#spring.jpa.hibernate.naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
 spring.jpa.properties.hibernate.format_sql: true
 
 #spring.jpa.hibernate.ddl-auto: validate #create-drop
