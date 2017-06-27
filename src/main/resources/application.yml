@@ -12,7 +12,7 @@ nevex-and-runkeeper:
     fitness-activities-url: ${nevex-and-runkeeper.runkeeper-api.base-url}/fitnessActivities
   oauth:
     redirect-host: http://localhost:56787
-    redirect-url: ${nevex-and-runkeeper.oauth.redirect-host}/register
+    redirect-url: ${nevex-and-runkeeper.oauth.redirect-host}${server.context-path}/register
     register-url: https://runkeeper.com/apps/authorize?client_id=${nevex-and-runkeeper.oauth.client-id}&response_type=code&redirect_uri=${nevex-and-runkeeper.oauth.redirect-url}
     token_url: ${nevex-and-runkeeper.oauth.base-url}/apps/token
     base-url: https://runkeeper.com
@@ -23,25 +23,23 @@ server:
 
 logging:
   file: log/nevex-and-runkeeper.log
+
 spring:
+  properties.hibernate.format_sql: true
   thymeleaf:
     cache: false
     prefix: classpath:/static/
     mode: HTML5
     suffix: .html
-
-spring.jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.show-sql: false
-spring.jpa.hibernate.ddl-auto: validate #auto-drop
-#spring.jpa.hibernate.naming.physical-strategy: org.hibernate.‌​boot.model.naming.Ph‌​ysicalNamingStrategy‌​StandardImpl
-spring.jpa.hibernate.naming.implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
-spring.jpa.hibernate.naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-#spring.jpa.hibernate.naming.implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
-#spring.jpa.hibernate.naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
-spring.jpa.properties.hibernate.format_sql: true
-
-#spring.jpa.hibernate.ddl-auto: validate #create-drop
-spring.datasource.url: jdbc:postgresql://localhost:5432/runkeeper
-spring.datasource.username: postgres
-spring.datasource.password: password
-
+  datasource:
+    url: jdbc:postgresql://localhost:5432/runkeeper
+    username: postgres
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    hibernate:
+      ddl-auto: validate #auto-drop
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

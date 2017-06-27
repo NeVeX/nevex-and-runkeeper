@@ -47,17 +47,17 @@ public final class HttpClientUtils {
 
             int respCode = conn.getResponseCode();
             if (respCode == HttpURLConnection.HTTP_OK || respCode == HttpURLConnection.HTTP_CREATED) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                StringBuilder jsonSb = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    jsonSb.append(line);
-                }
-                reader.close();
-
-                String jsonString = jsonSb.toString();
-
                 if ( returnType != null) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder jsonSb = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        jsonSb.append(line);
+                    }
+                    reader.close();
+
+                    String jsonString = jsonSb.toString();
+
                     if (returnType == String.class) {
                         return (T) jsonString;
                     } else {
