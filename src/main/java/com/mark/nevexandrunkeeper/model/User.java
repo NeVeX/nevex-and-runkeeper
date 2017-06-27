@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by NeVeX on 7/12/2016.
  */
-public class User implements Serializable {
+public final class User implements Serializable {
 
     private String name;
     private Date birthday;

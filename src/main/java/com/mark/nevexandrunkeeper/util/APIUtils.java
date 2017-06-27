@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by NeVeX on 7/6/2016.
  */
-public class APIUtils {
+public final class APIUtils {
 
     public static String getString(Map<String, String> map, String key) {
         return map.get(key);

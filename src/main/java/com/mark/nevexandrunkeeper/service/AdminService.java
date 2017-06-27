@@ -12,11 +12,9 @@ import com.mark.nevexandrunkeeper.util.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.Set;
 
 /**
@@ -25,35 +23,30 @@ import java.util.Set;
 @Service
 public class AdminService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AdminService.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminService.class);
 
-    @Autowired
-    private UserRegistrationService userRegistrationService;
-    @Autowired
-    private RunKeeperService runKeeperService;
-    @Autowired
-    private QuotationService quotationService;
+    private final UserRegistrationService userRegistrationService;
+    private final RunKeeperService runKeeperService;
+    private final QuotationService quotationService;
     private final LatestCommentForUserRepository latestCommentForUserRepository;
     private final String applicationAccessToken;
 
     @Autowired
-    public AdminService(ApplicationProperties applicationProperties, LatestCommentForUserRepository latestCommentForUserRepository) {
+    AdminService(ApplicationProperties applicationProperties,
+                        LatestCommentForUserRepository latestCommentForUserRepository,
+                        UserRegistrationService userRegistrationService,
+                        RunKeeperService runKeeperService,
+                        QuotationService quotationService) {
         this.applicationAccessToken = applicationProperties.getOauth().getAccessToken();
         this.latestCommentForUserRepository = latestCommentForUserRepository;
+        this.userRegistrationService = userRegistrationService;
+        this.runKeeperService = runKeeperService;
+        this.quotationService = quotationService;
     }
 
-    @PostConstruct
-    void init() {
-        LatestCommentForUserEntity entity = new LatestCommentForUserEntity();
-        entity.setLastFitnessId(1234L);
-        entity.setLastCommentAddedDate(TimeUtils.utcNow());
-        entity.setUserId(111);
-        LatestCommentForUserEntity saved = latestCommentForUserRepository.save(entity);
-        saved.toString();
-
-    }
-
-    public CommentJobEntity runCommentsJob() {
+    @Scheduled(initialDelay = 20000, fixedDelay = 60000) // Run every minute
+    CommentJobEntity runCommentsJob() {
+        LOGGER.info("Comments job kicked off");
         int commentsAdded = 0;
         int activeUsers = 0;
         int commentsFailed = 0;
@@ -66,11 +59,8 @@ public class AdminService {
             activeUsers = userRegistrationList.size();
             // get the last info for this user
             Iterable<LatestCommentForUserEntity> commentJobEntities = latestCommentForUserRepository.findAll();
-                    // ObjectifyService.ofy().load().type(LatestCommentForUserEntity.class).list();
 
             for (User u : userRegistrationList) {
-
-
                 try {
                     LatestCommentForUserEntity lastJob = null;
                     for (LatestCommentForUserEntity c : commentJobEntities) {
@@ -91,18 +81,13 @@ public class AdminService {
                         Integer fitnessId = Integer.parseInt(activityResponse.getUri().split("/")[2]);
                         if (fitnessId > lastJob.getLastFitnessId()) {
                             // this is a new fitness job
-
                             QuotationResponse quoteToUse = quotationService.getQuote();
                             boolean success = runKeeperService.addCommentToFitnessActivity(fitnessId, quoteToUse.getQuote(), applicationAccessToken);
                             if (success) {
                                 lastJob.setLastFitnessId(new Long(fitnessId));
                                 lastJob.setUserId(u.getUserId());
                                 lastJob.setLastCommentAddedDate(TimeUtils.utcNow());
-//                                ObjectifyService.ofy().save().entity(lastJob).now();
-
-                                latestCommentForUserRepository.save(lastJob); // new way
-
-
+                                latestCommentForUserRepository.save(lastJob);
                                 commentsAdded++;
                             } else {
                                 commentsFailed++;
@@ -117,7 +102,6 @@ public class AdminService {
                     LOGGER.error("Could not run job for user ["+u.getUserId()+"] with name ["+u.getName()+"]");
                     commentsFailed++;
                 }
-
             }
         }
         long timeTaken = System.currentTimeMillis() - startTime;

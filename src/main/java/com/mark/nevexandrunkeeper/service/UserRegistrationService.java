@@ -13,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.sql.Timestamp;
-import java.time.Clock;
-import java.time.OffsetDateTime;
 import java.util.*;
 
 /**
@@ -67,15 +64,12 @@ public class UserRegistrationService {
 
                     // Get all other users and mark them as invalid now
                     List<OAuthUserEntity> existingSignUps = oAuthUsersRepository.findByUserId(userId);
-//                            ObjectifyService.ofy().load().type(OAuthUserEntity.class).filter("userId", userId).list();
-
                     // this code should be extracted out
                     if ( existingSignUps != null && !existingSignUps.isEmpty()) {
                         for (OAuthUserEntity e : existingSignUps ) {
                             if ( e.isActive() ) {
                                 e.setActive(false);
                                 e.setUpdatedDate(TimeUtils.utcNow());
-//                                ObjectifyService.ofy().save().entity(e).now();
                                 oAuthUsersRepository.save(e);
                             }
                         }
@@ -87,7 +81,6 @@ public class UserRegistrationService {
 
                     RunKeeperProfileResponse profile = runKeeperService.getProfileInformation(accessToken);
                     if (profile != null) {
-
                         // See if we have this user already
                         RunKeeperUserEntity runKeeperUserEntityToSave = getUserEntity(userId);
                         if ( runKeeperUserEntityToSave == null ) {
@@ -113,11 +106,8 @@ public class UserRegistrationService {
 
                         oAuthUsersRepository.save(oAuthUserEntityToSave);
                         // save the oauth user information
-//                        ObjectifyService.ofy().save().entity(oAuthUserEntityToSave).now();
                         // try and save the user information too
                         runKeeperUsersRepository.save(runKeeperUserEntityToSave);
-//                        ObjectifyService.ofy().save().entity(runKeeperUserEntityToSave).now();
-
                         return runKeeperUserEntityToSave;
                     }
                 }
@@ -127,26 +117,22 @@ public class UserRegistrationService {
     }
 
     private RunKeeperUserEntity getUserEntity(int userId) {
-//        Key<RunKeeperUserEntity> key = Key.create(RunKeeperUserEntity.class, userId);
         Optional<RunKeeperUserEntity> optionalUser = runKeeperUsersRepository.findByUserId(userId);
         if ( optionalUser.isPresent() ) {
             return optionalUser.get();
         }
         return null;
-//        return ObjectifyService.ofy().load().key(key).now();
     }
 
     public void unregister(String oAuthCode) {
         if (StringUtils.hasText(oAuthCode)) {
             // find this oauth code
             List<OAuthUserEntity> registeredCodes = oAuthUsersRepository.findByOAuthCode(oAuthCode);
-                    // ObjectifyService.ofy().load().type(OAuthUserEntity.class).filter("oauthCode", oAuthCode).list();
             if ( registeredCodes != null && !registeredCodes.isEmpty()) {
                 // de-activate each one
                 for ( OAuthUserEntity entity : registeredCodes ) {
                     entity.setUpdatedDate(TimeUtils.utcNow());
                     entity.setActive(false);
-//                    ObjectifyService.ofy().save().entity(entity).now();
                     oAuthUsersRepository.save(entity);
                 }
 
@@ -154,10 +140,9 @@ public class UserRegistrationService {
         }
     }
 
-    public Set<User> getActiveUsers() {
+    Set<User> getActiveUsers() {
         Set<User> activeRegistrations = new HashSet<>();
         Iterable<OAuthUserEntity> registrations = oAuthUsersRepository.findAll();
-//                ObjectifyService.ofy().load().type(OAuthUserEntity.class).list();
         if ( registrations != null ) {
             for ( OAuthUserEntity entity : registrations) { //47002962
                 if ( entity.isActive() ) {
@@ -168,7 +153,6 @@ public class UserRegistrationService {
                             boolean requestSent = runKeeperService.sendFriendRequest(entity.getAccessToken(), applicationUserId);
                             if (requestSent) {
                                 entity.setFriendRequestSent(true);
-//                                ObjectifyService.ofy().save().entity(entity);
                                 oAuthUsersRepository.save(entity);
                             }
                         }
@@ -178,7 +162,6 @@ public class UserRegistrationService {
                             boolean areFriends = runKeeperService.isFriend(applicationAccessToken, entity.getUserId());
                             if (areFriends) {
                                 entity.setFriend(true);
-//                                ObjectifyService.ofy().save().entity(entity); // save this new fact
                                 oAuthUsersRepository.save(entity);
                             }
                         }
@@ -202,5 +185,4 @@ public class UserRegistrationService {
         }
         return activeRegistrations;
     }
-
 }

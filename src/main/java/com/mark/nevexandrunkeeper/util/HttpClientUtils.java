@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Created by NeVeX on 7/13/2016.
  */
-public class HttpClientUtils {
+public final class HttpClientUtils {
 
     private final static ObjectMapper OM = new ObjectMapper();
 
@@ -66,13 +66,22 @@ public class HttpClientUtils {
                 }
                 return null;
             }
-            throw new RunKeeperException("Received a non OK status from the API. \nURI: ["+url+"]. \nHeaders: ["+headers+"]. \nMethod: ["+method+"]. \nReturnType: ["+returnType+"]." +
-                    "\nResponse Code: ["+respCode+"]. \nResponse Message: ["+conn.getResponseMessage()+"].");
+            // Logging as much as we know about the exception
+            throw new RunKeeperException("Received a non OK status from the API. " +
+                    "\nURI: ["+url+"]. " +
+                    "\nHeaders: ["+headers+"]. " +
+                    "\nMethod: ["+method+"]. " +
+                    "\nReturnType: ["+returnType+"]." +
+                    "\nResponse Code: ["+respCode+"]. " +
+                    "\nResponse Message: ["+conn.getResponseMessage()+"].");
         } catch (RunKeeperException rke ) {
             throw rke;
         }
         catch (Exception e ) {
-            throw new APIException("There was a general problem contacting the API. URI: ["+uri+"]. \nHeaders: ["+headers+"]. \nMethod: ["+method+"]. \nReturnType: ["+returnType+"].", e);
+            throw new APIException("There was a general problem contacting the API. URI: ["+uri+"]. " +
+                    "\nHeaders: ["+headers+"]. " +
+                    "\nMethod: ["+method+"]. " +
+                    "\nReturnType: ["+returnType+"].", e);
         }
     }
 }

@@ -13,12 +13,13 @@ div {
     left:0;
     top: 0;
 }
+
 p {
     position: absolute;
     left:0;
     top: 0;
-    /*text-align: center;*/
 }
+
 span {
     color:blue;
     font-size:50px;
@@ -32,57 +33,3 @@ span {
     -ms-filter: blur(13px);
     filter: blur(0px);
 }
-
-
-
-
-
-
-
-
-/*.background:before {*/
-    /*!*content: "";*!*/
-    /*!*position: relative;*!*/
-    /*left: 0;*/
-    /*right: 0;*/
-    /*!*z-index: -1;*!*/
-
-    /*!*display: block;*!*/
-    /*background-size: cover;*/
-    /*!*background-size:cover;*!*/
-    /*background: url('https://www.union.ic.ac.uk/scc/law/wp-content/uploads/2015/10/welcome.jpg') no-repeat center center;*/
-    /*!*width: inherit;*!*/
-    /*!*height: inherit;*!*/
-
-    /*!*background-size: 100% 100%;*!*/
-
-    /*!*background: url(images/bg.jpg) no-repeat center center fixed;*!*/
-    /*-webkit-background-size: cover;*/
-    /*-moz-background-size: cover;*/
-    /*-o-background-size: cover;*/
-
-    /*-webkit-filter: blur(5px);*/
-    /*-moz-filter: blur(5px);*/
-    /*-o-filter: blur(5px);*/
-    /*-ms-filter: blur(5px);*/
-    /*filter: blur(5px);*/
-/*}*/
-
-/*.background {*/
-    /*position: fixed;*/
-    /*left: 0;*/
-    /*right: 0;*/
-    /*z-index: 0;*/
-    /*margin-left: 20px;*/
-    /*margin-right: 20px;*/
-
-    /*!*text-line-through-color: black;*!*/
-/*}*/
-
-/*!*style="background-image:url(https://www.union.ic.ac.uk/scc/law/wp-content/uploads/2015/10/welcome.jpg);*!*/
-/*!*background-size:cover;*!*/
-/*!*background-repeat:no-repeat;*!*/
-/*!*background-position:center center;*!*/
-/*!*color:white;*!*/
-/*!*text-shadow: 2px 2px 0px #000000;*!*/
-/*!*font-family:Verdana "*!*/

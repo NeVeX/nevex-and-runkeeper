@@ -5,6 +5,7 @@ import com.mark.nevexandrunkeeper.exception.RunKeeperException;
 import com.mark.nevexandrunkeeper.model.runkeeper.*;
 import com.mark.nevexandrunkeeper.util.APIUtils;
 import com.mark.nevexandrunkeeper.util.HttpClientUtils;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,9 @@ import java.util.Map;
  * Created by NeVeX on 7/6/2016.
  */
 @Service
-public class RunKeeperService {
+class RunKeeperService {
 
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(RunKeeperService.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(RunKeeperService.class);
 
     private final String oauthClientId;
     private final String oauthClientSecret;
@@ -32,7 +33,7 @@ public class RunKeeperService {
     private final String runKeeperApiBaseUrl;
 
     @Autowired
-    public RunKeeperService(ApplicationProperties applicationProperties) {
+    RunKeeperService(ApplicationProperties applicationProperties) {
         this.oauthClientId = applicationProperties.getOauth().getClientId();
         this.oauthClientSecret = applicationProperties.getOauth().getClientSecret();
         this.oauthRedirectUrl = applicationProperties.getOauth().getRedirectUrl();
@@ -43,9 +44,8 @@ public class RunKeeperService {
         this.runKeeperApiBaseUrl = applicationProperties.getRunkeeperApi().getBaseUrl();
     }
 
-    public String getAccessToken(String oauthCode) {
-        String url = new StringBuilder()
-            .append(runKeeperApiOauthTokenUrl)
+    String getAccessToken(String oauthCode) {
+        String url = new StringBuilder(runKeeperApiOauthTokenUrl)
             .append("?client_id=").append(oauthClientId)
             .append("&client_secret=").append(oauthClientSecret)
             .append("&redirect_uri=").append(APIUtils.urlEncodeString(oauthRedirectUrl))
@@ -55,10 +55,11 @@ public class RunKeeperService {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/x-www-form-urlencoded");
 
-        RunKeeperAccessTokenResponse accessTokenResponse = null;
+        RunKeeperAccessTokenResponse accessTokenResponse ;
         try {
             accessTokenResponse = HttpClientUtils.execute(url, headers, "POST", RunKeeperAccessTokenResponse.class);
         } catch (RunKeeperException e) {
+            LOGGER.warn("An exception occurred while trying to get access token for oauth code [{}]. Reason: [{}]", oauthCode, e.getMessage());
             return null; // catch and ignore for now
         }
         return accessTokenResponse != null ? accessTokenResponse.getAccessToken() : null;
@@ -74,12 +75,12 @@ public class RunKeeperService {
         try {
             rur = HttpClientUtils.execute(runKeeperApiUserUrl, headers, "GET", RunKeeperUserResponse.class);
         } catch (Exception e ){
-            LOGGER.error("Something went wrong getting user information from runkeeper api. "+e.getMessage());
+            LOGGER.error("Something went wrong getting user information from RunKeeper api. [{}]", e.getMessage());
         }
         return rur != null ? rur.getUserId() : null;
     }
 
-    public boolean sendFriendRequest(String accessToken, long userId) {
+    boolean sendFriendRequest(String accessToken, long userId) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/vnd.com.runkeeper.Invitation+json");
         headers.put("Authorization", "Bearer "+accessToken);
@@ -89,12 +90,13 @@ public class RunKeeperService {
             HttpClientUtils.execute(runKeeperApiBaseUrl + "/team", headers, "POST", invitationRequest, String.class);
             return true;
         } catch (Exception e ) {
-            LOGGER.error("Something went wrong sent a friend request for token ["+accessToken+"] for userId ["+userId+"] runkeeper api. "+e.getMessage());
+            LOGGER.error("Something went wrong sent a friend request for token [{}] for userId [{}] RunKeeper api. ",
+                    accessToken, userId, e.getMessage());
             return false;
         }
     }
 
-    public boolean isFriend(String accessToken, long userId) {
+    boolean isFriend(String accessToken, long userId) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/vnd.com.runkeeper.Reply+json");
         headers.put("Authorization", "Bearer "+accessToken);
@@ -114,24 +116,21 @@ public class RunKeeperService {
                     // see if we have more friends
                     if ( StringUtils.hasText(response.getNextUri())) {
                         urlToInvoke = runKeeperApiBaseUrl + response.getNextUri();
-                        LOGGER.warn("Did not find friends in request but there are more friends to check - using the uri next ["+urlToInvoke+"]");
+                        LOGGER.warn("Did not find friends in request but there are more friends to check - using the uri next [{}]", urlToInvoke);
                     } else {
                         stillMoreFriendsToTry = false;
                     }
                 } else {
                     stillMoreFriendsToTry = false;
                 }
-
             }
-
         } catch (Exception e ) {
-            LOGGER.error("Something went wrong determining if token ["+accessToken+"] is a friend of userId ["+userId+"] using the runkeeper api. "+e.getMessage());
-
+            LOGGER.error("Something went wrong determining if token ["+accessToken+"] is a friend of userId ["+userId+"] using the RunKeeper api. Reason [{}]", e.getMessage());
         }
         return false;
     }
 
-    public RunKeeperProfileResponse getProfileInformation(String accessToken) {
+    RunKeeperProfileResponse getProfileInformation(String accessToken) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/vnd.com.runkeeper.Profile+json");
         headers.put("Authorization", "Bearer "+accessToken);
@@ -140,34 +139,32 @@ public class RunKeeperService {
         try {
             rpr = HttpClientUtils.execute(runKeeperApiProfileUrl, headers, "GET", RunKeeperProfileResponse.class);
         } catch (Exception e ) {
-            LOGGER.error("Something went wrong getting profile information from runkeeper api. "+e.getMessage());
+            LOGGER.error("Something went wrong getting profile information from RunKeeper api. Reason [{}]", e.getMessage());
         }
         return rpr;
     }
 
-    public RunKeeperFitnessActivityResponse getLastFitness(String accessToken) {
-
+    RunKeeperFitnessActivityResponse getLastFitness(String accessToken) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/vnd.com.runkeeper.FitnessActivity+json");
-//        headers.put("Accept", "application/vnd.com.runkeeper.FitnessActivitySummary+json");
         headers.put("Authorization", "Bearer "+accessToken);
         RunKeeperFitnessActivityResponse rpr = null;
         try {
-            RunKeeperFitnessActivityListResponse listResponse = HttpClientUtils.execute(runKeeperApiFitnessActivitiesUrl+"?pageSize=1", headers, "GET", RunKeeperFitnessActivityListResponse.class);
+            RunKeeperFitnessActivityListResponse listResponse = HttpClientUtils.execute(runKeeperApiFitnessActivitiesUrl+"?pageSize=1",
+                    headers, "GET", RunKeeperFitnessActivityListResponse.class);
             if ( listResponse != null && listResponse.getItems() != null && !listResponse.getItems().isEmpty()) {
                 rpr = listResponse.getItems().get(0);
             }
         } catch (Exception e ) {
-            LOGGER.error("Something went wrong getting last fitness info information from runkeeper api. "+e.getMessage());
+            LOGGER.error("Something went wrong getting last fitness info information from RunKeeper api. Reason [{}]", e.getMessage());
         }
         return rpr;
     }
 
-    public boolean addCommentToFitnessActivity(Integer fitnessId, String msg, String accessToken) {
+    boolean addCommentToFitnessActivity(Integer fitnessId, String msg, String accessToken) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/vnd.com.runkeeper.Comment+json");
         headers.put("Authorization", "Bearer "+accessToken);
-
         RunKeeperFitnessCommentRequest request = new RunKeeperFitnessCommentRequest();
         request.setComment(msg);
         try {
@@ -175,7 +172,7 @@ public class RunKeeperService {
             HttpClientUtils.execute(runKeeperApiFitnessActivitiesUrl + "/" + fitnessId + "/comments", headers, "POST", request, null);
             return true;
         } catch (Exception e ) {
-            LOGGER.error("Something went wrong sending a comment to the runkeeper api. "+e.getMessage());
+            LOGGER.error("Something went wrong sending a comment to the RunKeeper api. Reason [{}]", e.getMessage());
             return false;
         }
     }
