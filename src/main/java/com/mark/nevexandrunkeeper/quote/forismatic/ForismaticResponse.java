@@ -1,8 +1,9 @@
-package com.mark.nevexandrunkeeper.model;
+package com.mark.nevexandrunkeeper.quote.forismatic;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 
@@ -11,7 +12,7 @@ import java.io.Serializable;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class QuotationResponse implements Serializable {
+class ForismaticResponse implements Serializable {
 
     @JsonProperty("quoteText")
     private String text;
@@ -34,8 +35,11 @@ public class QuotationResponse implements Serializable {
         this.author = author;
     }
 
-    public String getQuote() {
-        return text + " - " + author;
+    /**
+     * @return True if the author and text is not blank
+     */
+    boolean isValid() {
+        return !StringUtils.isEmpty(author) && !StringUtils.isEmpty(text);
     }
 
 }

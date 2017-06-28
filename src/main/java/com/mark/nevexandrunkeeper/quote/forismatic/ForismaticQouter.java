@@ -1,7 +1,8 @@
-package com.mark.nevexandrunkeeper.service.quotes;
+package com.mark.nevexandrunkeeper.quote.forismatic;
 
 import com.mark.nevexandrunkeeper.config.ApplicationProperties;
-import com.mark.nevexandrunkeeper.model.QuotationResponse;
+import com.mark.nevexandrunkeeper.quote.Quote;
+import com.mark.nevexandrunkeeper.quote.Quoter;
 import com.mark.nevexandrunkeeper.util.HttpClientUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +26,17 @@ class ForismaticQouter implements Quoter {
     }
 
     @Override
-    public Optional<QuotationResponse> getQuote() {
-        QuotationResponse response = null;
+    public Optional<Quote> getQuote() {
+        Quote quote = null;
         try {
-            response = HttpClientUtils.execute(quotationUrl, null, "GET", QuotationResponse.class);
+            ForismaticResponse response = HttpClientUtils.execute(quotationUrl, null, "GET", ForismaticResponse.class);
+            if ( response != null && response.isValid()) {
+                quote = new Quote(response.getAuthor(), response.getText());
+            }
         } catch (Exception e ) {
             LOGGER.error("There was a problem contacting the Forismatic quotation API [{}]. Error message: [{}]", quotationUrl, e.getMessage());
         }
-        return Optional.ofNullable(response);
+        return Optional.ofNullable(quote);
     }
 
 }

@@ -1,6 +1,5 @@
-package com.mark.nevexandrunkeeper.service.quotes;
+package com.mark.nevexandrunkeeper.quote;
 
-import com.mark.nevexandrunkeeper.model.QuotationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +11,7 @@ import java.util.Optional;
 @Service
 public class QuotationService {
 
-    private static QuotationResponse DEFAULT_QUOTE;
+    private static final Quote DEFAULT_QUOTE = new Quote("NeVeX", "Well done - so proud of you! Keep it up! :-)");
     private final Quoter quoter;
 
     @Autowired
@@ -20,15 +19,9 @@ public class QuotationService {
         this.quoter = quoter;
     }
 
-    static {
-        DEFAULT_QUOTE = new QuotationResponse();
-        DEFAULT_QUOTE.setAuthor("NeVeX");
-        DEFAULT_QUOTE.setText("Well done - so proud of you! Keep it up! :-)");
-    }
-
-    public QuotationResponse getQuote() {
+    public Quote getQuote() {
         for ( int i = 0; i < 3; i++) {
-            Optional<QuotationResponse> response = this.quoter.getQuote();
+            Optional<Quote> response = this.quoter.getQuote();
             if (response.isPresent()) {
                 return response.get();
             }

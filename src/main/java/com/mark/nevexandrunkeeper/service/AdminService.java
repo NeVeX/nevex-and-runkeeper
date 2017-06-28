@@ -4,10 +4,10 @@ import com.mark.nevexandrunkeeper.config.ApplicationProperties;
 import com.mark.nevexandrunkeeper.dao.LatestCommentForUserRepository;
 import com.mark.nevexandrunkeeper.dao.entity.CommentJobEntity;
 import com.mark.nevexandrunkeeper.dao.entity.LatestCommentForUserEntity;
-import com.mark.nevexandrunkeeper.model.QuotationResponse;
 import com.mark.nevexandrunkeeper.model.User;
 import com.mark.nevexandrunkeeper.model.runkeeper.RunKeeperFitnessActivityResponse;
-import com.mark.nevexandrunkeeper.service.quotes.QuotationService;
+import com.mark.nevexandrunkeeper.quote.QuotationService;
+import com.mark.nevexandrunkeeper.quote.Quote;
 import com.mark.nevexandrunkeeper.util.TimeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +81,7 @@ public class AdminService {
                         Integer fitnessId = Integer.parseInt(activityResponse.getUri().split("/")[2]);
                         if (fitnessId > lastJob.getLastFitnessId()) {
                             // this is a new fitness job
-                            QuotationResponse quoteToUse = quotationService.getQuote();
+                            Quote quoteToUse = quotationService.getQuote();
                             boolean success = runKeeperService.addCommentToFitnessActivity(fitnessId, quoteToUse.getQuote(), applicationAccessToken);
                             if (success) {
                                 lastJob.setLastFitnessId(new Long(fitnessId));
