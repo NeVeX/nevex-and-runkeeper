@@ -7,12 +7,16 @@ CREATE TABLE nevex.runkeeper_users
     id integer NOT NULL,
     user_id integer NOT NULL,
     created_date timestamp with time zone NOT NULL,
+    updated_date timestamp with time zone,
     name character varying NOT NULL,
     location character varying,
     gender character varying,
     birthday date,
     sign_up_date date NOT NULL,
     athlete_type character varying,
+    is_active boolean NOT NULL,
+    is_friend_request_sent boolean NOT NULL,
+    is_friend boolean NOT NULL,
     PRIMARY KEY (id)
 )
 WITH (

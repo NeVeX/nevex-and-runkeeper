@@ -26,6 +26,7 @@ public interface ApplicationProperties {
         String getBaseUrl();
         String getUserUrl();
         String getProfileUrl();
+        String getTeamUrl();
         String getFitnessActivitiesUrl();
     }
 

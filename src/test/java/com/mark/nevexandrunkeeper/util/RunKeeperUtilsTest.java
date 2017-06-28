@@ -1,12 +1,11 @@
 package com.mark.nevexandrunkeeper.util;
 
+import com.mark.nevexandrunkeeper.runkeeper.RunKeeperUtils;
 import org.junit.Test;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneOffset;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
@@ -19,7 +18,7 @@ public class RunKeeperUtilsTest {
 
     @Test
     public void testBirthdayCanParse() {
-        // This is what runkeeper will give, so make sure it parses correctly
+        // This is what model will give, so make sure it parses correctly
         String birthday = "Sat, 1 Jan 2011 00:00:00";
         Optional<Date> parsedDate = RunKeeperUtils.parseBirthdayDate(birthday);
         assertTrue(parsedDate.isPresent());

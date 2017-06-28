@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  */
 @Configuration
 @Validated
-@ConfigurationProperties(prefix = "nevex-and-runkeeper")
+@ConfigurationProperties(prefix = "nevex-and-model")
 class LocalProperties implements ApplicationProperties{
 
     @NotNull
@@ -41,6 +41,9 @@ class LocalProperties implements ApplicationProperties{
         @NotNull
         @NotEmpty
         private String fitnessActivitiesUrl;
+        @NotNull
+        @NotEmpty
+        private String teamUrl;
 
         @Override
         public String getBaseUrl() {
@@ -76,6 +79,15 @@ class LocalProperties implements ApplicationProperties{
 
         public void setFitnessActivitiesUrl(String fitnessActivitiesUrl) {
             this.fitnessActivitiesUrl = fitnessActivitiesUrl;
+        }
+
+        @Override
+        public String getTeamUrl() {
+            return teamUrl;
+        }
+
+        public void setTeamUrl(String teamUrl) {
+            this.teamUrl = teamUrl;
         }
     }
 

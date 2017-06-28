@@ -1,84 +1,32 @@
 package com.mark.nevexandrunkeeper.model;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by NeVeX on 7/12/2016.
  */
-public final class User implements Serializable {
+public final class User {
 
-    private String name;
-    private Date birthday;
-    private String athleteType;
-    private int userId;
-    private String accessToken;
-    private String gender;
-    private String location;
-    private Date signUpDate;
+    private final String name;
+    private final int userId;
+    private final boolean isActive;
+
+    public User(int userId, String name, boolean isActive) {
+        this.name = name;
+        this.userId = userId;
+        this.isActive = isActive;
+    }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getAthleteType() {
-        return athleteType;
-    }
-
-    public void setAthleteType(String athleteType) {
-        this.athleteType = athleteType;
     }
 
     public int getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public Date getSignUpDate() {
-        return signUpDate;
-    }
-
-    public void setSignUpDate(Date signUpDate) {
-        this.signUpDate = signUpDate;
+    public boolean isActive() {
+        return isActive;
     }
 
     @Override
@@ -91,20 +39,14 @@ public final class User implements Serializable {
 
     @Override
     public int hashCode() {
-        return userId;
+        return Objects.hash(userId);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "name='" + name + '\'' +
-                ", birthday=" + birthday +
-                ", athleteType='" + athleteType + '\'' +
                 ", userId=" + userId +
-                ", accessToken='" + accessToken + '\'' +
-                ", gender='" + gender + '\'' +
-                ", location='" + location + '\'' +
-                ", signUpDate=" + signUpDate +
                 '}';
     }
 }

@@ -1,6 +1,6 @@
 -- Database: runkeeper
 
--- DROP DATABASE runkeeper;
+-- DROP DATABASE model;
 
 CREATE DATABASE runkeeper
     WITH
