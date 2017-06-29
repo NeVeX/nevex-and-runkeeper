@@ -50,7 +50,7 @@ class OAuthCallbackController {
             // Now we have access to this person's account, let's get and save the information
             user = registrationService.createNewUserAccount(accessToken);
         } catch (RunKeeperException ex) {
-            LOGGER.error("Could not create an account for access token [{}]", accessToken);
+            LOGGER.error("Could not create an account for access token [{}]", accessToken, ex);
             return ControllerConstants.REDIRECT_TO_ERROR_PAGE;
         }
 

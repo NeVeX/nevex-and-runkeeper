@@ -26,6 +26,8 @@ logging:
   file: log/nevex-and-runkeeper.log
 
 spring:
+  profiles:
+    active: live
   properties.hibernate.format_sql: true
   thymeleaf:
     cache: false

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
+
+import java.net.URLEncoder;
 
 /**
  * Created by Mark Cunningham on 6/27/2017.
@@ -22,16 +25,19 @@ class RegistrationController {
 
     @Autowired
     RegistrationController(ApplicationProperties applicationProperties,
-                           RegistrationService registrationService) {
-        this.runKeeperRegisterUrl = applicationProperties.getOauth().getRegisterUrl();
+                           RegistrationService registrationService) throws Exception {
         this.registrationService = registrationService;
+
+        String registerUrl = applicationProperties.getOauth().getRegisterUrl();
+        // Add the redirect back to your site
+        this.runKeeperRegisterUrl = applicationProperties.getOauth().getRegisterUrl();
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String register() {
-        LOGGER.info("Signing up a new user using the RunKeeper redirect [{}]", runKeeperRegisterUrl);
+    public RedirectView register() {
+        LOGGER.info("Signing up a new user using the RunKeeper authorization redirect [{}]", runKeeperRegisterUrl);
         // We just need to redirect
-        return "redirect:"+ runKeeperRegisterUrl;
+        return new RedirectView(runKeeperRegisterUrl);
     }
 
     @RequestMapping(value = "unregister", method = RequestMethod.GET)

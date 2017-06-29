@@ -99,7 +99,7 @@ public final class RunKeeperAPIClient {
     public Optional<Integer> getUserId(String accessToken) throws RunKeeperAPIException {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/vnd.com.model.User+json");
+        headers.add("Accept", "application/vnd.com.runkeeper.User+json");
         headers.add("Authorization", "Bearer "+accessToken);
         HttpEntity httpEntity = new HttpEntity<>(headers);
 
@@ -123,7 +123,7 @@ public final class RunKeeperAPIClient {
     public Optional<RunKeeperProfileResponse> getProfileInformation(String accessToken) throws RunKeeperAPIException {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/vnd.com.model.Profile+json");
+        headers.add("Accept", "application/vnd.com.runkeeper.Profile+json");
         headers.add("Authorization", "Bearer "+accessToken);
         HttpEntity httpEntity = new HttpEntity<>(headers);
 
@@ -147,7 +147,8 @@ public final class RunKeeperAPIClient {
     public boolean sendFriendRequest(String accessToken, int userIdToFriend) throws RunKeeperAPIException {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/vnd.com.model.Invitation+json");
+        headers.add("Accept", "application/vnd.com.runkeeper.Invitation+json");
+        headers.add("Content-Type", "application/json");
         headers.add("Authorization", "Bearer "+accessToken);
 
         RunKeeperFriendInvitationRequest invitationRequest = new RunKeeperFriendInvitationRequest();
@@ -172,10 +173,10 @@ public final class RunKeeperAPIClient {
         return !StringUtils.isEmpty(response.getBody());
     }
 
-    public Optional<RunKeeperFitnessActivityResponse> getLastestFitness(String accessToken) throws RunKeeperAPIException {
+    public Optional<RunKeeperFitnessActivityResponse> getLatestFitness(String accessToken) throws RunKeeperAPIException {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/vnd.com.model.FitnessActivity+json");
+        headers.add("Accept", "application/vnd.com.runkeeper.FitnessActivity+json");
         headers.add("Authorization", "Bearer "+accessToken);
         HttpEntity httpEntity = new HttpEntity<>(headers);
 
@@ -233,7 +234,7 @@ public final class RunKeeperAPIClient {
 
     private RunKeeperFriendsReplyWrapperResponse getAllFriendsInPage(String accessToken, String pageUri) throws RunKeeperAPIException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/vnd.com.model.Reply+json");
+        headers.add("Accept", "application/vnd.com.runkeeper.Reply+json");
         headers.add("Authorization", "Bearer "+accessToken);
         HttpEntity httpEntity = new HttpEntity<>(headers);
 
@@ -260,7 +261,8 @@ public final class RunKeeperAPIClient {
 
     public boolean addCommentToFitnessActivity(Long fitnessId, String msg, String accessToken) throws RunKeeperAPIException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/vnd.com.model.Comment+json");
+        headers.add("Accept", "application/vnd.com.runkeeper.Comment+json");
+        headers.add("Content-Type", "application/json");
         headers.add("Authorization", "Bearer "+accessToken);
 
         RunKeeperFitnessCommentRequest request = new RunKeeperFitnessCommentRequest();

@@ -30,20 +30,25 @@ public class OAuthUserService {
         return Optional.ofNullable(userEntities.get(0).getAccessToken()); // just pick the first one
     }
 
-    public boolean saveNewRegistrationCode(String oauthCode) {
+    public boolean saveNewRegistration(String accessToken, String oauthCode) {
         OAuthUserEntity entity = new OAuthUserEntity();
         entity.setCreatedDate(TimeUtils.utcNow());
         entity.setOauthCode(oauthCode);
+        entity.setAccessToken(accessToken);
         entity.setIsActive(true);
         return oAuthUsersRepository.save(entity) != null; // return if we saved or not
     }
 
-    public boolean saveAccessTokenForOauthCode(String accessToken, String oauthCode) {
-        OAuthUserEntity activeOAuth = oAuthUsersRepository.findByActiveOAuthCode(oauthCode);
-        activeOAuth.setAccessToken(accessToken);
-        activeOAuth.setUpdatedDate(TimeUtils.utcNow());
-        return oAuthUsersRepository.save(activeOAuth) != null;
-    }
+//    public boolean saveAccessTokenForOauthCode(String accessToken, String oauthCode) {
+//        Optional<OAuthUserEntity> activeOAuthOptional = oAuthUsersRepository.findByActiveOAuthCode(oauthCode);
+//        if ( !activeOAuthOptional.isPresent()) {
+//            return false;
+//        }
+//        OAuthUserEntity activeOAuth = activeOAuthOptional.get();
+//        activeOAuth.setAccessToken(accessToken);
+//        activeOAuth.setUpdatedDate(TimeUtils.utcNow());
+//        return oAuthUsersRepository.save(activeOAuth) != null;
+//    }
 
     public int setAllOAuthRecordsAsInactiveForUserId(int userId) {
         List<OAuthUserEntity> activeOAuthEntries = oAuthUsersRepository.findByUserIdAndIsActive(userId);
@@ -56,12 +61,25 @@ public class OAuthUserService {
         return activeOAuthEntries.size();
     }
 
-    public boolean setActiveOauthForUserAndToken(int userId, String accessToken) {
-        OAuthUserEntity entity = oAuthUsersRepository.findUserWithAccessToken(userId, accessToken);
-        entity.setIsActive(true);
-        entity.setUpdatedDate(TimeUtils.utcNow());
-        return oAuthUsersRepository.save(entity) != null;
+    public boolean setUserIdForToken(int userId, String accessToken) {
+        Optional<OAuthUserEntity> activeAccessTokenOptional = oAuthUsersRepository.findActiveAccessToken(accessToken);
+        if ( !activeAccessTokenOptional.isPresent()) {
+            return false;
+        }
+        OAuthUserEntity activeToken = activeAccessTokenOptional.get();
+        activeToken.setUserId(userId);
+        activeToken.setUpdatedDate(TimeUtils.utcNow());
+        return oAuthUsersRepository.save(activeToken) != null;
     }
 
-
+    // TODO: Expect a list of active codes?
+    public void setAllOAuthCodesToInactive(String oauthCode) {
+        Optional<OAuthUserEntity> userEntityOptional = oAuthUsersRepository.findByActiveOAuthCode(oauthCode);
+        if ( userEntityOptional.isPresent()) {
+            OAuthUserEntity entity = userEntityOptional.get();
+            entity.setIsActive(false);
+            entity.setUpdatedDate(TimeUtils.utcNow());
+            oAuthUsersRepository.save(entity);
+        }
+    }
 }

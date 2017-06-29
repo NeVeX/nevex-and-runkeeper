@@ -9,7 +9,6 @@ import com.mark.nevexandrunkeeper.runkeeper.api.model.RunKeeperFitnessActivityRe
 import com.mark.nevexandrunkeeper.runkeeper.comment.model.entity.CommentJobEntity;
 import com.mark.nevexandrunkeeper.runkeeper.comment.model.entity.CommentsToUsersEntity;
 import com.mark.nevexandrunkeeper.runkeeper.comment.model.entity.LatestCommentForUserEntity;
-import com.mark.nevexandrunkeeper.runkeeper.exception.RunKeeperException;
 import com.mark.nevexandrunkeeper.runkeeper.oauth.OAuthUserService;
 import com.mark.nevexandrunkeeper.runkeeper.user.UserService;
 import com.mark.nevexandrunkeeper.util.TimeUtils;
@@ -154,7 +153,7 @@ public class CommentService {
     private Optional<Long> getLastFitnessId(String accessToken) {
         Optional<RunKeeperFitnessActivityResponse> responseOptional;
         try {
-            responseOptional = apiClient.getLastestFitness(accessToken);
+            responseOptional = apiClient.getLatestFitness(accessToken);
         } catch (RunKeeperAPIException apiEx) {
             LOGGER.warn("Could not get the latest fitness activity for access token [{}]", accessToken);
             responseOptional = Optional.empty();

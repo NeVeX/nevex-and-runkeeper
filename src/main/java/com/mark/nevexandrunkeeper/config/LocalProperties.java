@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  */
 @Configuration
 @Validated
-@ConfigurationProperties(prefix = "nevex-and-model")
+@ConfigurationProperties(prefix = "nevex-and-runkeeper")
 class LocalProperties implements ApplicationProperties{
 
     @NotNull
