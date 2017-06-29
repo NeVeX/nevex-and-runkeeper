@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -25,6 +27,7 @@ public class FriendService {
     private static final Logger LOGGER = LoggerFactory.getLogger(FriendService.class);
 
     private final int applicationUserId;
+    private final String applicationAccessToken;
     private final RunKeeperAPIClient apiClient;
     private final UserService userService;
     private final OAuthUserService oAuthUserService;
@@ -38,6 +41,7 @@ public class FriendService {
         this.apiClient = apiClient;
         this.userService = userService;
         this.oAuthUserService = oAuthUserService;
+        this.applicationAccessToken = applicationProperties.getOauth().getAccessToken();
     }
 
     @Transactional
@@ -64,6 +68,37 @@ public class FriendService {
         return totalRequestsSent;
     }
 
+    @Transactional
+    public int checkIfNewFriendsHaveBeenMade() throws RunKeeperException {
+        // Get all the users that have friends requests sent, but are not friends yet
+        List<User> usersNotFriends = userService.getAllActiveUsersThatWereFriendRequestedButAreNotFriendsYet();
+        if ( usersNotFriends.isEmpty()) {
+            return 0;
+        }
+        int newFriends = 0;
+        // Now, for each friend, see if we are their friend now
+        Set<Integer> friendsToCheck = usersNotFriends.stream().map(User::getUserId).collect(Collectors.toSet());
+        Set<Integer> currentFriends;
+        try {
+            currentFriends = apiClient.getAllFriends(applicationAccessToken);
+        } catch (RunKeeperAPIException apiEx) {
+            throw new RunKeeperException("Could not get all the friends for this application", apiEx);
+        }
+
+        LOGGER.info("Checking a total of [{}] friend requests against the current [{}] set of friends accepted",
+                friendsToCheck.size(), currentFriends.size());
+
+        for ( int friendCheck : friendsToCheck) {
+            if ( currentFriends.contains(friendCheck)) {
+                // FRRRRIIIIEEEENNNNDDDD!!!
+                userService.setIsFriend(friendCheck);
+                LOGGER.info("***** We are now friends with [{}]", friendCheck);
+            }
+        }
+        return newFriends;
+    }
+
+    // Use the person's token to friend this bot
     private boolean askApplicationToBecomeUsersFriend(String accessToken) {
         try {
             return apiClient.sendFriendRequest(accessToken, applicationUserId);
@@ -74,12 +109,12 @@ public class FriendService {
     }
 
 
-    private boolean sendFriendRequest(String friendAccessToken) throws RunKeeperException {
-        try {
-            return apiClient.sendFriendRequest(friendAccessToken, applicationUserId);
-        } catch (RunKeeperAPIException apiEx) {
-            throw new RunKeeperException(apiEx);
-        }
-    }
+//    private boolean sendFriendRequest(String friendAccessToken) throws RunKeeperException {
+//        try {
+//            return apiClient.sendFriendRequest(friendAccessToken, applicationUserId);
+//        } catch (RunKeeperAPIException apiEx) {
+//            throw new RunKeeperException(apiEx);
+//        }
+//    }
 
 }

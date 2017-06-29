@@ -16,7 +16,7 @@ public class RunKeeperFriendsReplyResponse implements Serializable {
     @JsonProperty("reply")
     private String reply;
     @JsonProperty("userID")
-    private Long userId;
+    private Integer userId;
     @JsonProperty("name")
     private String name;
 
@@ -28,11 +28,11 @@ public class RunKeeperFriendsReplyResponse implements Serializable {
         this.reply = reply;
     }
 
-    public Long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

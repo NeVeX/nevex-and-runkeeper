@@ -13,4 +13,8 @@ public final class RunKeeperException extends Exception {
         super(ex);
     }
 
+    public RunKeeperException(String msg, Exception ex) {
+        super(msg, ex);
+    }
+
 }

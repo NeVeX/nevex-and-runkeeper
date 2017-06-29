@@ -28,8 +28,6 @@ public class CommentJobEntity implements Serializable {
     private int commentsFailed;
     @Column(name = "comments_ignored")
     private int commentsIgnored;
-    @Column(name = "comment_used")
-    private String commentUsed;
 
     public int getId() {
         return id;
@@ -87,14 +85,6 @@ public class CommentJobEntity implements Serializable {
         this.commentsIgnored = commentsIgnored;
     }
 
-    public String getCommentUsed() {
-        return commentUsed;
-    }
-
-    public void setCommentUsed(String commentUsed) {
-        this.commentUsed = commentUsed;
-    }
-
     @Override
     public String toString() {
         return "CommentJobEntity{" +
@@ -105,7 +95,6 @@ public class CommentJobEntity implements Serializable {
                 ", activeUsers=" + activeUsers +
                 ", commentsFailed=" + commentsFailed +
                 ", commentsIgnored=" + commentsIgnored +
-                ", commentUsed='" + commentUsed + '\'' +
                 '}';
     }
 }

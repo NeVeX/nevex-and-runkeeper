@@ -22,6 +22,6 @@ interface UsersRepository extends CrudRepository<RunKeeperUserEntity, Integer> {
     List<RunKeeperUserEntity> findAllActiveUsersNotFriendRequested();
 
     @Query("select u from RunKeeperUserEntity u where u.isActive = true and u.isFriendRequestSent = true and u.isFriend = false")
-    List<RunKeeperUserEntity> findAllActiveUsersNotFriends();
+    List<RunKeeperUserEntity> findAllActiveUsersNotFriendsYet();
 
 }

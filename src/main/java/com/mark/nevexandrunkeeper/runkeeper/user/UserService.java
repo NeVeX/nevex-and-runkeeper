@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by Mark Cunningham on 6/27/2017.
@@ -60,7 +57,20 @@ public class UserService {
         if (usersRepository.save(userEntity) == null) {
             throw new RunKeeperException("Could not save user profile for userId ["+userId+"]");
         }
-        return new User(userId, userEntity.getName()); // Our new user in the system
+        return new User(userId, userEntity.getName(), userEntity.getIsActive()); // Our new user in the system
+    }
+
+    // TODO: Paginate this
+    public Set<User> getAllActiveUsers() {
+        Set<User> users = new HashSet<>();
+        for (RunKeeperUserEntity user : usersRepository.findAll()) {
+            users.add(new User(
+                    user.getUserId(),
+                    user.getName(),
+                    user.getIsActive()
+            ));
+        }
+        return users;
     }
 
     public boolean setUserInactive(int userId) {
@@ -76,7 +86,7 @@ public class UserService {
 
     public List<User> getAllActiveUsersThatHaveNotGotFriendRequested() {
         List<User> activeUsersNotFriends = new ArrayList<>();
-        List<RunKeeperUserEntity> userEntities = usersRepository.findAllActiveUsersNotFriends();
+        List<RunKeeperUserEntity> userEntities = usersRepository.findAllActiveUsersNotFriendRequested();
         for ( RunKeeperUserEntity userEntity: userEntities ) {
             activeUsersNotFriends.add(new User(userEntity.getUserId(), userEntity.getName(), userEntity.getIsActive()));
         }
@@ -90,7 +100,36 @@ public class UserService {
         }
         RunKeeperUserEntity entity = userEntityOptional.get();
         entity.setIsFriendRequestSent(true);
+        entity.setUpdatedDate(TimeUtils.utcNow());
         return usersRepository.save(entity) != null;
+    }
+
+    public boolean setIsFriend(int userId) {
+        Optional<RunKeeperUserEntity> userEntityOptional = usersRepository.findByUserId(userId);
+        if ( !userEntityOptional.isPresent()) {
+            return false;
+        }
+        RunKeeperUserEntity entity = userEntityOptional.get();
+        entity.setIsFriend(true);
+        entity.setUpdatedDate(TimeUtils.utcNow());
+        return usersRepository.save(entity) != null;
+    }
+
+    public List<User> getAllActiveUsersThatWereFriendRequestedButAreNotFriendsYet() {
+        List<RunKeeperUserEntity> notFriendsEntities = usersRepository.findAllActiveUsersNotFriendsYet();
+        List<User> usersThatAreNotFriends = new ArrayList<>();
+        if ( notFriendsEntities.isEmpty()) {
+            return usersThatAreNotFriends;
+        }
+
+        for ( RunKeeperUserEntity userEntity : notFriendsEntities) {
+            usersThatAreNotFriends.add(new User(
+                    userEntity.getUserId(),
+                    userEntity.getName(),
+                    userEntity.getIsActive()
+            ));
+        }
+        return usersThatAreNotFriends;
     }
 
 }

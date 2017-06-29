@@ -16,7 +16,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by NeVeX on 7/13/2016.
@@ -203,7 +204,61 @@ public final class RunKeeperAPIClient {
         return Optional.empty();
     }
 
-    public boolean addCommentToFitnessActivity(Integer fitnessId, String msg, String accessToken) throws RunKeeperAPIException {
+    public Set<Integer> getAllFriends(String accessToken) throws RunKeeperAPIException {
+        Set<Integer> allFriends = new HashSet<>();
+
+        String pageUri = "/team";
+        boolean hasMoreFriends = true;
+
+        while ( hasMoreFriends) {
+            RunKeeperFriendsReplyWrapperResponse response = getAllFriendsInPage(accessToken, pageUri);
+            // Check if we have friends
+            List<RunKeeperFriendsReplyResponse> friends = response.getItems();
+            if (friends != null && !friends.isEmpty()) {
+                // We have some friends
+                allFriends.addAll(friends.stream().map(RunKeeperFriendsReplyResponse::getUserId).collect(Collectors.toList()));
+                // Do we have more friends? Check the next uri?
+                hasMoreFriends = StringUtils.hasText(response.getNextUri());
+                if ( hasMoreFriends ) {
+                    // Yup, we have more friends to get
+                    pageUri = response.getNextUri(); // Set the page uri to get the next set of friends
+                }
+            } else {
+                hasMoreFriends = false; // no more friends
+            }
+        }
+
+        return allFriends;
+    }
+
+    private RunKeeperFriendsReplyWrapperResponse getAllFriendsInPage(String accessToken, String pageUri) throws RunKeeperAPIException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/vnd.com.model.Reply+json");
+        headers.add("Authorization", "Bearer "+accessToken);
+        HttpEntity httpEntity = new HttpEntity<>(headers);
+
+
+        ResponseEntity<RunKeeperFriendsReplyWrapperResponse> response;
+        String url = runKeeperApiBaseUrl + pageUri; // need to build it here since we'll use the API url for pagination
+
+        try {
+            response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, RunKeeperFriendsReplyWrapperResponse.class);
+        } catch (RestClientException ex) {
+            LOGGER.error("An error occurred while trying to get all friends for access token [{}]. Url [{}]. Headers [{}]",
+                    accessToken, url, headers);
+            throw new RunKeeperAPIException("Could not get friends for access token ["+accessToken+"]", ex);
+        }
+
+        if ( response.getStatusCode() != HttpStatus.OK) {
+            LOGGER.warn("Received a non-ok code [{}] from RunKeeper while trying to get all friends for access token [{}]",
+                    response.getStatusCode(), accessToken);
+            throw new RunKeeperAPIException("Could not get all friends for access token ["+accessToken+"]");
+        }
+        return response.getBody();
+    }
+
+
+    public boolean addCommentToFitnessActivity(Long fitnessId, String msg, String accessToken) throws RunKeeperAPIException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/vnd.com.model.Comment+json");
         headers.add("Authorization", "Bearer "+accessToken);

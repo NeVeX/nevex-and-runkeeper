@@ -11,7 +11,6 @@ CREATE TABLE nevex.comment_jobs
     comments_added integer NOT NULL,
     comments_failed integer NOT NULL,
     comments_ignored integer NOT NULL,
-    comment_used character varying NOT NULL,
     PRIMARY KEY (id)
 )
 WITH (

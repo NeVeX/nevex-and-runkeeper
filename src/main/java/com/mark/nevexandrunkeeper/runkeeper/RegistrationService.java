@@ -31,16 +31,11 @@ public class RegistrationService {
     private final RunKeeperAPIClient runKeeperAPIClient;
     private final OAuthUserService oAuthUserService;
     private final UserService userService;
-    private final String applicationAccessToken;
-    private final int applicationUserId;
 
     @Autowired
-    public RegistrationService(ApplicationProperties applicationProperties,
-                               RunKeeperAPIClient runKeeperAPIClient,
+    public RegistrationService(RunKeeperAPIClient runKeeperAPIClient,
                                OAuthUserService oAuthUserService,
                                UserService userService) {
-        this.applicationAccessToken = applicationProperties.getOauth().getAccessToken();
-        this.applicationUserId = applicationProperties.getUserId();
         this.runKeeperAPIClient = runKeeperAPIClient;
         this.oAuthUserService = oAuthUserService;
         this.userService = userService;
@@ -112,28 +107,6 @@ public class RegistrationService {
         User user = userService.saveProfile(userId, profile);
         LOGGER.info("A new user has been created in the system [{}]", user);
         return user;
-
-
-//        // add application to the friends of this user
-//        boolean requestSent = runKeeperService.sendFriendRequest(accessToken, applicationUserId);
-//
-//        oAuthUserEntityToSave.setIsFriendRequestSent(requestSent);
-//
-//        oAuthUsersRepository.save(oAuthUserEntityToSave);
-//        // save the oauth user information
-//        // try and save the user information too
-//        runKeeperUsersRepository.save(runKeeperUserEntityToSave);
-//        return runKeeperUserEntityToSave;
-//
-
-    }
-
-    private RunKeeperUserEntity getUserEntity(int userId) {
-        Optional<RunKeeperUserEntity> optionalUser = runKeeperUsersRepository.findByUserId(userId);
-        if ( optionalUser.isPresent() ) {
-            return optionalUser.get();
-        }
-        return null;
     }
 
     public boolean unregister(int userId) {
@@ -148,49 +121,4 @@ public class RegistrationService {
         return true;
     }
 
-    Set<User> getActiveUsers() {
-        Set<User> activeRegistrations = new HashSet<>();
-        Iterable<OAuthUserEntity> registrations = oAuthUsersRepository.findAll();
-        if ( registrations != null ) {
-            for ( OAuthUserEntity entity : registrations) { //47002962
-                if ( entity.getIsActive() ) {
-
-                    if ( !entity.isFriend() ) {
-                        // See if the friend request should be sent (legacy data may miss this)
-                        if (!entity.isFriendRequestSent()) {
-                            boolean requestSent = runKeeperService.sendFriendRequest(entity.getAccessToken(), applicationUserId);
-                            if (requestSent) {
-                                entity.setFriendRequestSent(true);
-                                oAuthUsersRepository.save(entity);
-                            }
-                        }
-                        // re-heck if we should check if we are friends now
-                        if (entity.isFriendRequestSent()) {
-                            // see if we are friends now
-                            boolean areFriends = runKeeperService.isFriend(applicationAccessToken, entity.getUserId());
-                            if (areFriends) {
-                                entity.setFriend(true);
-                                oAuthUsersRepository.save(entity);
-                            }
-                        }
-                    }
-                    if ( entity.isFriend()) { // Recheck since we could of connected above
-                        RunKeeperUserEntity ue = getUserEntity(entity.getUserId());
-                        User u = new User();
-                        u.setUserId(ue.getUserId());
-                        u.setName(ue.getName());
-                        u.setAccessToken(entity.getAccessToken());
-                        u.setLocation(ue.getLocation());
-                        u.setAthleteType(ue.getAthleteType());
-                        u.setBirthday(ue.getBirthday());
-                        u.setGender(ue.getGender());
-                        u.setSignUpDate(ue.getSignUpDate());
-                        // Add this to the list of registrations
-                        activeRegistrations.add(u);
-                    }
-                }
-            }
-        }
-        return activeRegistrations;
-    }
 }

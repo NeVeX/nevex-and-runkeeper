@@ -8,7 +8,7 @@ CREATE TABLE nevex.latest_comment_for_users
     user_id integer NOT NULL,
     last_comment_added_date timestamp with time zone NOT NULL,
     last_fitness_id bigint NOT NULL,
-    PRIMARY KEY (user_id)
+    PRIMARY KEY (id)
 )
 WITH (
     OIDS = FALSE

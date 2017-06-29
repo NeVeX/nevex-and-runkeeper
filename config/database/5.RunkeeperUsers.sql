@@ -4,7 +4,7 @@
 
 CREATE TABLE nevex.runkeeper_users
 (
-    id integer NOT NULL,
+    id serial NOT NULL,
     user_id integer NOT NULL,
     created_date timestamp with time zone NOT NULL,
     updated_date timestamp with time zone,
