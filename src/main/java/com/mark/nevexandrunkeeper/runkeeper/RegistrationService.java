@@ -55,6 +55,9 @@ public class RegistrationService {
         }
 
         String accessToken = accessTokenOptional.get();
+        // If we have any other codes, mark them as inactive now
+        oAuthUserService.setAllOAuthAccessTokensInactive(accessToken);
+
         if (!oAuthUserService.saveNewRegistration(accessToken, oauthCode)) {
             throw new RunKeeperException("Could not save new registration access token [" + accessToken + "] for code [" + oauthCode + "]");
         }

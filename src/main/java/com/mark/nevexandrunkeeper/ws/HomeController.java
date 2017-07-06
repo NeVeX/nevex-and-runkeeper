@@ -13,6 +13,6 @@ public class HomeController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String getHomeView() {
-        return ControllerConstants.HOME_PAGE; // Just route to home.html
+        return ControllerConstants.LANDING_PAGE;
     }
 }

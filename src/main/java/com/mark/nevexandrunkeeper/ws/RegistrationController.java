@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.net.URLEncoder;
-
 /**
  * Created by Mark Cunningham on 6/27/2017.
  */
@@ -27,8 +25,6 @@ class RegistrationController {
     RegistrationController(ApplicationProperties applicationProperties,
                            RegistrationService registrationService) throws Exception {
         this.registrationService = registrationService;
-
-        String registerUrl = applicationProperties.getOauth().getRegisterUrl();
         // Add the redirect back to your site
         this.runKeeperRegisterUrl = applicationProperties.getOauth().getRegisterUrl();
     }
@@ -41,15 +37,15 @@ class RegistrationController {
     }
 
     @RequestMapping(value = "unregister", method = RequestMethod.GET)
-    public String unregister(@RequestParam("user_id") Integer userId) {
+    public RedirectView unregister(@RequestParam("user_id") Integer userId) {
         if ( userId == null ) {
             LOGGER.warn("No User Id provided so cannot unregister");
-            return ControllerConstants.REDIRECT_TO_ERROR_PAGE;
+            return new RedirectView(ControllerConstants.ERROR_PAGE);
         }
         if (registrationService.unregister(userId)) {
-            return ControllerConstants.REDIRECT_TO_HOME_PAGE; // Back to the home page
+            return new RedirectView(ControllerConstants.LANDING_PAGE); // Back to the home page
         }
-        return ControllerConstants.REDIRECT_TO_ERROR_PAGE;
+        return new RedirectView(ControllerConstants.ERROR_PAGE);
     }
 
 }

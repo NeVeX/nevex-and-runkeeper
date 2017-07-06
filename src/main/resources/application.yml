@@ -1,7 +1,4 @@
-#service-host-url: https://nevex-and-runkeeper.appspot.com
 
-## Remove these!
-### https://runkeeper.com/partner/applications/keysAndURLs?clientID=51407cdf5a9344bf8cdeb4cd6bf00e39
 nevex-and-runkeeper:
   quotation:
     forismatic-url: http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en
@@ -24,6 +21,7 @@ server:
 
 logging:
   file: log/nevex-and-runkeeper.log
+  level: debug
 
 spring:
   profiles:
@@ -34,6 +32,7 @@ spring:
     prefix: classpath:/static/
     mode: HTML5
     suffix: .html
+    view-names: landing-page, welcome, error
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false

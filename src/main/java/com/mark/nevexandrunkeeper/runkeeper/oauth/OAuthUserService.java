@@ -63,14 +63,25 @@ public class OAuthUserService {
         return oAuthUsersRepository.save(activeToken) != null;
     }
 
-    // TODO: Expect a list of active codes?
     public void setAllOAuthCodesToInactive(String oauthCode) {
         Optional<OAuthUserEntity> userEntityOptional = oAuthUsersRepository.findByActiveOAuthCode(oauthCode);
         if ( userEntityOptional.isPresent()) {
             OAuthUserEntity entity = userEntityOptional.get();
-            entity.setIsActive(false);
-            entity.setUpdatedDate(TimeUtils.utcNow());
-            oAuthUsersRepository.save(entity);
+            inactivateOAuthUserEntity(entity);
         }
+    }
+
+    public void setAllOAuthAccessTokensInactive(String accessToken) {
+        Optional<OAuthUserEntity> userEntityOptional = oAuthUsersRepository.findActiveAccessToken(accessToken);
+        if ( userEntityOptional.isPresent()) {
+            OAuthUserEntity entity = userEntityOptional.get();
+            inactivateOAuthUserEntity(entity);
+        }
+    }
+
+    private void inactivateOAuthUserEntity(OAuthUserEntity entity) {
+        entity.setIsActive(false);
+        entity.setUpdatedDate(TimeUtils.utcNow());
+        oAuthUsersRepository.save(entity);
     }
 }

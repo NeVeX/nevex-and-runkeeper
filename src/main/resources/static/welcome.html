@@ -1,45 +1,35 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <style>
-            .main-div {
-                background-image:url(images/welcome.jpg);
-                background-size:cover;
-                background-repeat:no-repeat;
-                background-position:center center;
-                color:white;
-                text-shadow: 2px 2px 0px #000000;
-                font-family:Verdana;
-            }
-            .overlay-div {
-                background-color:rgba(0, 0, 0, 0.48);
-            }
-            .unregister-link {
-                color: white;
-            }
-            .unregister-span {
-                background-color: red;
-                padding-left: 2px;
-                padding-bottom: 2px;
-                padding-right: 2px;
-            }
-        </style>
-    </head>
-    <body class="main-div">
-        <div class="overlay-div">
-            <h3>Welcome <strong th:text="${name}">Mark</strong>!</h3>
+	<head>
+		<title>Welcome</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="assets_welcomepage/css/main.css" />
+	</head>
+	<body>
 
-            <h3>Thanks for registering with your new overlord friend, <strong>NeVeX</strong>.</h3>
+		<section id="banner" data-video="images/running">
+			<div class="inner">
+				<header>
+					<h4>Welcome, <strong th:text="${name}">Mark</strong></h4>
+					<h4>Thanks for registering with the RunKeeper Inspiration Machine!
+						<br/>
+					Now get out there and start running, you slob!
+					</h4>
+					<h2>
+						:-*
+					</h2>
+				</header>
+			</div>
+		</section>
 
-            <p>Now, sit back, relax, and go for a run you slob; then let <strong>NeVeX Inspiration</strong> guide you to your goals.</p>
+		<!-- Scripts -->
+		<script src="assets_welcomepage/js/jquery.min.js"></script>
+		<script src="assets_welcomepage/js/jquery.scrolly.min.js"></script>
+		<script src="assets_welcomepage/js/skel.min.js"></script>
+		<script src="assets_welcomepage/js/util.js"></script>
+		<script src="assets_welcomepage/js/main.js"></script>
 
-            <h2>:-*</h2>
-
-            <p>To hawt to handle? Unregister
-                <em><span class="unregister-span">
-                    <a class="unregister-link" th:href="${unregister_uri}">here</a>
-                </span></em>, loser.</p>
-        </div>
-    </body>
+	</body>
 </html>
