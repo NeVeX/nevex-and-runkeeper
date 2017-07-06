@@ -7,7 +7,7 @@ CREATE TABLE nevex.comments_to_users
     id serial NOT NULL,
     user_id integer NOT NULL,
     created_date timestamp with time zone NOT NULL,
-    comment character varying NOT NULL,
+    comment text NOT NULL,
     PRIMARY KEY (id)
 )
 WITH (

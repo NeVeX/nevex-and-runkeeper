@@ -31,8 +31,6 @@ public class RunKeeperUserEntity implements Serializable {
     private String gender;
     @Column(name = "birthday")
     private Date birthday;
-    @Column(name = "sign_up_date")
-    private Date signUpDate;
     @Column(name = "athlete_type")
     private String athleteType;
     @Column(name = "is_friend_request_sent")
@@ -98,14 +96,6 @@ public class RunKeeperUserEntity implements Serializable {
         this.birthday = birthday;
     }
 
-    public Date getSignUpDate() {
-        return signUpDate;
-    }
-
-    public void setSignUpDate(Date signUpDate) {
-        this.signUpDate = signUpDate;
-    }
-
     public Timestamp getCreatedDate() {
         return createdDate;
     }
@@ -158,7 +148,6 @@ public class RunKeeperUserEntity implements Serializable {
                 ", location='" + location + '\'' +
                 ", gender=" + gender +
                 ", birthday='" + birthday + '\'' +
-                ", signUpDate=" + signUpDate +
                 ", isFriendRequestSent=" + isFriendRequestSent +
                 ", IsFriend=" + isFriend +
                 ", athleteType='" + athleteType + '\'' +

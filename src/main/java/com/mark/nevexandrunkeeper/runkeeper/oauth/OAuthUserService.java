@@ -4,6 +4,7 @@ import com.mark.nevexandrunkeeper.runkeeper.oauth.model.entity.OAuthUserEntity;
 import com.mark.nevexandrunkeeper.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import java.util.Optional;
  * Created by Mark Cunningham on 6/27/2017.
  */
 @Service
+@Transactional
 public class OAuthUserService {
 
     private final OAuthUsersRepository oAuthUsersRepository;
@@ -38,17 +40,6 @@ public class OAuthUserService {
         entity.setIsActive(true);
         return oAuthUsersRepository.save(entity) != null; // return if we saved or not
     }
-
-//    public boolean saveAccessTokenForOauthCode(String accessToken, String oauthCode) {
-//        Optional<OAuthUserEntity> activeOAuthOptional = oAuthUsersRepository.findByActiveOAuthCode(oauthCode);
-//        if ( !activeOAuthOptional.isPresent()) {
-//            return false;
-//        }
-//        OAuthUserEntity activeOAuth = activeOAuthOptional.get();
-//        activeOAuth.setAccessToken(accessToken);
-//        activeOAuth.setUpdatedDate(TimeUtils.utcNow());
-//        return oAuthUsersRepository.save(activeOAuth) != null;
-//    }
 
     public int setAllOAuthRecordsAsInactiveForUserId(int userId) {
         List<OAuthUserEntity> activeOAuthEntries = oAuthUsersRepository.findByUserIdAndIsActive(userId);

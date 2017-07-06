@@ -17,8 +17,8 @@ public final class Quote {
         if (StringUtils.isEmpty(text)) {
             throw new IllegalArgumentException("Provided quote text is blank");
         }
-        this.author = author;
-        this.text = text;
+        this.author = StringUtils.trimWhitespace(author);
+        this.text = StringUtils.trimWhitespace(text);
     }
 
     public String getText() {

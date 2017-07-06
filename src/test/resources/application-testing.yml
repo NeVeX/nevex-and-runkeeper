@@ -1,0 +1,14 @@
+spring:
+  properties.hibernate.format_sql: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+
+spring:
+  profiles:
+    active:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/runkeeper
+    username: postgres
+    password: password

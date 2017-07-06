@@ -78,7 +78,7 @@ public final class RunKeeperAPIClient {
             throw new RunKeeperAPIException("Could not get an access token for code "+code, ex);
         }
 
-        if ( response.getStatusCode() != HttpStatus.OK) {
+        if ( !response.getStatusCode().is2xxSuccessful()) {
             LOGGER.warn("Received a non-ok code [{}] from RunKeeper while trying to get an access token for code [{}]",
                     response.getStatusCode(), code);
             throw new RunKeeperAPIException("Could not get an access token for code "+code);
@@ -112,7 +112,7 @@ public final class RunKeeperAPIClient {
             throw new RunKeeperAPIException("Could not get the userId for access token ["+accessToken+"]", ex);
         }
 
-        if ( userResponse.getStatusCode() != HttpStatus.OK) {
+        if ( !userResponse.getStatusCode().is2xxSuccessful()) {
             LOGGER.warn("Received a non-ok code [{}] from RunKeeper while trying to get the userId for access token [{}]",
                     userResponse.getStatusCode(), accessToken);
             throw new RunKeeperAPIException("Could not get the userId for access token ["+accessToken+"]");
@@ -136,7 +136,7 @@ public final class RunKeeperAPIClient {
             throw new RunKeeperAPIException("Could not get the user profile for access token ["+accessToken+"]", ex);
         }
 
-        if ( profileResponse.getStatusCode() != HttpStatus.OK) {
+        if ( !profileResponse.getStatusCode().is2xxSuccessful()) {
             LOGGER.warn("Received a non-ok code [{}] from RunKeeper while trying to get the user profile for access token [{}]",
                     profileResponse.getStatusCode(), accessToken);
             throw new RunKeeperAPIException("Could not get the user profile for access token ["+accessToken+"]");
@@ -147,8 +147,7 @@ public final class RunKeeperAPIClient {
     public boolean sendFriendRequest(String accessToken, int userIdToFriend) throws RunKeeperAPIException {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Accept", "application/vnd.com.runkeeper.Invitation+json");
-        headers.add("Content-Type", "application/json");
+        headers.add("Content-Type", "application/vnd.com.runkeeper.Invitation+json");
         headers.add("Authorization", "Bearer "+accessToken);
 
         RunKeeperFriendInvitationRequest invitationRequest = new RunKeeperFriendInvitationRequest();
@@ -160,23 +159,24 @@ public final class RunKeeperAPIClient {
             response = restTemplate.exchange(runKeeperApiTeamUrl, HttpMethod.POST, httpEntity, String.class);
         } catch (Exception ex ) {
             LOGGER.error("An error occurred while trying to send a friend request for access token [{}] and userId [{}]. Url [{}]. Headers [{}]",
-                    accessToken, userIdToFriend, runKeeperApiProfileUrl, headers);
+                    accessToken, userIdToFriend, runKeeperApiTeamUrl, headers);
             throw new RunKeeperAPIException("Could not send fried request for access token ["+accessToken+"]", ex);
         }
 
-        if ( response.getStatusCode() != HttpStatus.OK) {
-            LOGGER.warn("Received a non-ok code [{}] from RunKeeper while trying send a friend request for access token [{}]",
+        if ( !response.getStatusCode().is2xxSuccessful()) {
+            LOGGER.warn("Received a non-successful code [{}] from RunKeeper while trying send a friend request for access token [{}]",
                     response.getStatusCode(), accessToken);
             throw new RunKeeperAPIException("Could not send friend request for access token ["+accessToken+"]");
         }
 
-        return !StringUtils.isEmpty(response.getBody());
+        return true;
     }
 
     public Optional<RunKeeperFitnessActivityResponse> getLatestFitness(String accessToken) throws RunKeeperAPIException {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Accept", "application/vnd.com.runkeeper.FitnessActivity+json");
+        headers.add("Content-Type", "application/vnd.com.runkeeper.FitnessActivity+json");
+        headers.add("Accept", "*/*"); // RunKeeper is broken without this....
         headers.add("Authorization", "Bearer "+accessToken);
         HttpEntity httpEntity = new HttpEntity<>(headers);
 
@@ -193,7 +193,7 @@ public final class RunKeeperAPIClient {
             throw new RunKeeperAPIException("Could not get latest fitness activity for access token ["+accessToken+"]", ex);
         }
 
-        if ( response.getStatusCode() != HttpStatus.OK) {
+        if ( !response.getStatusCode().is2xxSuccessful()) {
             LOGGER.warn("Received a non-ok code [{}] from RunKeeper while trying to get latest fitness activity for access token [{}]",
                     response.getStatusCode(), accessToken);
             throw new RunKeeperAPIException("Could not get latest fitness activity for access token ["+accessToken+"]");
@@ -234,7 +234,8 @@ public final class RunKeeperAPIClient {
 
     private RunKeeperFriendsReplyWrapperResponse getAllFriendsInPage(String accessToken, String pageUri) throws RunKeeperAPIException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Accept", "application/vnd.com.runkeeper.Reply+json");
+        headers.add("Content-Type", "application/vnd.com.runkeeper.Reply+json");
+        headers.add("Accept", "*/*"); // RunKeeper is broken without this....
         headers.add("Authorization", "Bearer "+accessToken);
         HttpEntity httpEntity = new HttpEntity<>(headers);
 
@@ -250,7 +251,7 @@ public final class RunKeeperAPIClient {
             throw new RunKeeperAPIException("Could not get friends for access token ["+accessToken+"]", ex);
         }
 
-        if ( response.getStatusCode() != HttpStatus.OK) {
+        if ( !response.getStatusCode().is2xxSuccessful()) {
             LOGGER.warn("Received a non-ok code [{}] from RunKeeper while trying to get all friends for access token [{}]",
                     response.getStatusCode(), accessToken);
             throw new RunKeeperAPIException("Could not get all friends for access token ["+accessToken+"]");
@@ -261,8 +262,8 @@ public final class RunKeeperAPIClient {
 
     public boolean addCommentToFitnessActivity(Long fitnessId, String msg, String accessToken) throws RunKeeperAPIException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Accept", "application/vnd.com.runkeeper.Comment+json");
-        headers.add("Content-Type", "application/json");
+        headers.add("Content-Type", "application/vnd.com.runkeeper.Comment+json");
+        headers.add("Accept", "*/*"); // RunKeeper is broken without this....
         headers.add("Authorization", "Bearer "+accessToken);
 
         RunKeeperFitnessCommentRequest request = new RunKeeperFitnessCommentRequest();
@@ -280,7 +281,7 @@ public final class RunKeeperAPIClient {
             throw new RunKeeperAPIException("Could not add comment to fitness id ["+fitnessId+"] for access token ["+accessToken+"]", ex);
         }
 
-        if ( response.getStatusCode() != HttpStatus.OK) {
+        if ( !response.getStatusCode().is2xxSuccessful()) {
             LOGGER.warn("Received a non-ok code [{}] from RunKeeper while trying to add a comment to fitness activity [{}] with access token [{}]",
                     response.getStatusCode(), fitnessId, accessToken);
             throw new RunKeeperAPIException("Could not add a comment to fitness id ["+fitnessId+"] activity with access token ["+accessToken+"]");

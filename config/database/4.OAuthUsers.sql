@@ -6,10 +6,10 @@ CREATE TABLE nevex.oauth_users
 (
     id serial NOT NULL,
     user_id integer,
-    code character varying NOT NULL,
+    code text NOT NULL,
     created_date timestamp with time zone NOT NULL,
     updated_date timestamp with time zone,
-    access_token character varying,
+    access_token text,
     is_active boolean NOT NULL,
     PRIMARY KEY (id)
 )

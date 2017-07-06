@@ -18,6 +18,7 @@ import java.util.*;
  * Created by Mark Cunningham on 6/27/2017.
  */
 @Service
+@Transactional
 public class UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
     private final UsersRepository usersRepository;
@@ -27,7 +28,6 @@ public class UserService {
         this.usersRepository = usersRepository;
     }
 
-    @Transactional
     public User saveProfile(int userId, RunKeeperProfileResponse profile) throws RunKeeperException {
         RunKeeperUserEntity userEntity;
         // See if we have this user profile already

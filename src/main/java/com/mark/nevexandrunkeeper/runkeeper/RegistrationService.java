@@ -19,6 +19,7 @@ import java.util.Optional;
  * Created by NeVeX on 7/4/2016.
  */
 @Service
+@Transactional
 public class RegistrationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationService.class);
@@ -36,7 +37,6 @@ public class RegistrationService {
         this.userService = userService;
     }
 
-    @Transactional
     public String registerNewUser(String oauthCode) throws RunKeeperException {
 
         // If we have any other codes, mark them as inactive now
@@ -61,7 +61,6 @@ public class RegistrationService {
         return accessToken;
     }
 
-    @Transactional
     public User createNewUserAccount(String accessToken) throws RunKeeperException {
 
         Optional<Integer> userIdOptional;

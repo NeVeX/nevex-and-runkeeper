@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import java.util.Optional;
  * Created by Mark Cunningham on 6/26/2017.
  */
 @Repository
+@Transactional
 interface OAuthUsersRepository extends CrudRepository<OAuthUserEntity, Integer> {
 
     @Query("select u from OAuthUserEntity u where u.userId = :userId and u.isActive = true")
