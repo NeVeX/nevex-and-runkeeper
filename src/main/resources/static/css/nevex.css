@@ -1,0 +1,18 @@
+
+.override-p {
+    padding: 20px;
+    background: white;
+}
+
+.override-footer {
+    margin-top: 50px;
+}
+
+.override-div-quote {
+    background: white;
+}
+
+.override-quote-text {
+    font-size: 18px;
+    font-weight: 500;
+}
