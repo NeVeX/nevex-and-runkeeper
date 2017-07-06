@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -44,10 +45,8 @@ public class UserService {
         userEntity.setUserId(userId);
         userEntity.setCreatedDate(TimeUtils.utcNow());
 
-        Optional<Date> birthDateOptional = RunKeeperUtils.parseBirthdayDate(profile.getBirthday());
-        if ( birthDateOptional.isPresent() ) {
-            userEntity.setBirthday(new java.sql.Date(birthDateOptional.get().getTime()));
-        }
+        Optional<LocalDate> birthDateOptional = RunKeeperUtils.parseBirthdayDate(profile.getBirthday());
+        birthDateOptional.ifPresent(localDate -> userEntity.setBirthday(java.sql.Date.valueOf(localDate)));
 
         userEntity.setGender(profile.getGender());
         userEntity.setLocation(profile.getLocation());

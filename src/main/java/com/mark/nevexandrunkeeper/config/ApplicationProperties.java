@@ -34,4 +34,39 @@ public interface ApplicationProperties {
         String getForismaticUrl();
     }
 
+    /**
+     * Cannot name this "toString" since it will be override by Object.toString();
+     */
+    default String toStringProperties() {
+        String props = "UserId: "+getUserId()+".";
+        if ( getOauth() != null ) {
+            props += " Oauth { " +
+                    "redirectHost: " + getOauth().getRedirectHost() +
+                    ", redirectUrl: " + getOauth().getRedirectUrl() +
+                    ", registerUrl: " + getOauth().getRegisterUrl() +
+                    ", tokenUrl: " + getOauth().getTokenUrl() +
+                    ", baseUrl: " + getOauth().getBaseUrl() +
+                    ", clientId: " + getOauth().getClientId() +
+                    ", clientSecret: " + getOauth().getClientSecret() +
+                    ", code: " + getOauth().getCode() +
+                    ", accessToken: " + getOauth().getAccessToken() +
+                    "}.";
+        }
+        if ( getRunkeeperApi() != null ) {
+            props += " RunKeeperApi { " +
+                    "baseUrl: " + getRunkeeperApi().getBaseUrl() +
+                    ", userUrl: " + getRunkeeperApi().getUserUrl() +
+                    ", profileUrl: " + getRunkeeperApi().getProfileUrl() +
+                    ", teamUrl: " + getRunkeeperApi().getTeamUrl() +
+                    ", fitnessActivitiesUrl: " + getRunkeeperApi().getFitnessActivitiesUrl() +
+                    "}.";
+        }
+        if ( getQuotation() != null ) {
+            props += " Quotation { " +
+                    "forismaticUrl: " + getQuotation().getForismaticUrl() +
+                    "}.";
+        }
+        return props;
+    }
+
 }

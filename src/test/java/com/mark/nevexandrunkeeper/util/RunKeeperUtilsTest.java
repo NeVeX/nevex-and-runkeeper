@@ -20,9 +20,9 @@ public class RunKeeperUtilsTest {
     public void testBirthdayCanParse() {
         // This is what model will give, so make sure it parses correctly
         String birthday = "Sat, 1 Jan 2011 00:00:00";
-        Optional<Date> parsedDate = RunKeeperUtils.parseBirthdayDate(birthday);
-        assertTrue(parsedDate.isPresent());
-        LocalDate localBirthday = parsedDate.get().toInstant().atOffset(ZoneOffset.UTC).toLocalDate();
+        Optional<LocalDate> parsedDateOptional = RunKeeperUtils.parseBirthdayDate(birthday);
+        assertTrue(parsedDateOptional.isPresent());
+        LocalDate localBirthday = parsedDateOptional.get();
         assertTrue(localBirthday.getMonth() == Month.JANUARY);
         assertTrue(localBirthday.getDayOfMonth() == 1);
         assertTrue(localBirthday.getYear() == 2011);

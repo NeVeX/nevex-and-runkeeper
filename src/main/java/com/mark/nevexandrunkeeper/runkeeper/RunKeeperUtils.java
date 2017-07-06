@@ -21,17 +21,15 @@ public final class RunKeeperUtils {
     // We expect the string in the form of Sat, 1 Jan 2011 00:00:00
     private static DateTimeFormatter BIRTHDAY_FORMATTER = DateTimeFormatter.ofPattern("E, d MMM u HH:mm:ss");
 
-    public static Optional<Date> parseBirthdayDate(String birthday) {
-        Date date = null;
+    public static Optional<LocalDate> parseBirthdayDate(String birthday) {
         if (!StringUtils.isEmpty(birthday)) {
             try {
-                LocalDate parsedDate = LocalDate.parse(birthday, BIRTHDAY_FORMATTER);
-                date = Date.from(parsedDate.atStartOfDay(ZoneId.of("UTC")).toInstant());
+                return Optional.of(LocalDate.parse(birthday, BIRTHDAY_FORMATTER));
             } catch (DateTimeParseException ex ) {
                 LOGGER.warn("Could not parse given birthday [{}] into a date. Reason: [{}]", birthday, ex.getMessage());
             }
         }
-        return Optional.ofNullable(date);
+        return Optional.empty();
     }
 
 }

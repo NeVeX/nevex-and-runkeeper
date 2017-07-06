@@ -1,0 +1,3 @@
+nevex-and-runkeeper:
+  oauth:
+    redirect-host: http://localhost:56787
