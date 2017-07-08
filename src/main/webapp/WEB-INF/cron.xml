@@ -1,12 +1,18 @@
 <cronentries>
-    <cron>
-        <url>/admin/schedule/job/comments</url>
-        <description>Add comments to users activities</description>
-        <schedule>every 5 minutes</schedule>
-        <retry-parameters>
-            <min-backoff-seconds>5</min-backoff-seconds>
-            <max-doublings>3</max-doublings>
-        </retry-parameters>
-    </cron>
+    <!--
+
+    Disabling this job here since it cannot be disabled directly in google cloud
+    and the 2.0.0 release is out.
+
+    -->
+    <!--<cron>-->
+        <!--<url>/admin/schedule/job/comments</url>-->
+        <!--<description>Add comments to users activities</description>-->
+        <!--<schedule>every 5 minutes</schedule>-->
+        <!--<retry-parameters>-->
+            <!--<min-backoff-seconds>5</min-backoff-seconds>-->
+            <!--<max-doublings>3</max-doublings>-->
+        <!--</retry-parameters>-->
+    <!--</cron>-->
 </cronentries>
 
