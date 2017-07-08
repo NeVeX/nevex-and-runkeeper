@@ -1,0 +1,1 @@
+nohup java -Xmx200M -Xms50M -Dspring.profiles.active=pi -jar nevex-and-runkeeper-2.0.0.jar &

@@ -57,7 +57,6 @@ public class CommentService {
         this.commentsToUsersRepository = commentsToUsersRepository;
         this.commentJobsRepository = commentJobsRepository;
         this.applicationAccessToken = applicationProperties.getOauth().getAccessToken();
-
     }
 
     public int sendCommentsToFriends() {
