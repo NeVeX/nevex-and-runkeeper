@@ -12,3 +12,12 @@ spring:
     url: jdbc:postgresql://localhost:5432/runkeeper
     username: postgres
     password: password
+
+nevex-and-runkeeper:
+  user-id: 12345
+  oauth:
+    client-id: client_id
+    client-secret: client_secret
+    code: oauth_code
+    access-token: access_token
+    redirect-host: http://localhost:56787
