@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableScheduling
 @EnableTransactionManagement
-public class NeVeXAndRunKeeperApplication {
+public class NeVeXAndRunkeeperApplicationTester {
 
     public static void main(String[] args) {
         // Let's get this baby going!
-        SpringApplication.run(NeVeXAndRunKeeperApplication.class, args);
+        SpringApplication.run(NeVeXAndRunkeeperApplicationTester.class, args);
     }
 
 }
