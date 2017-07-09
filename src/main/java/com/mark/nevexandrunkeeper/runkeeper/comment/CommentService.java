@@ -1,5 +1,6 @@
 package com.mark.nevexandrunkeeper.runkeeper.comment;
 
+import com.mark.nevexandrunkeeper.config.ApplicationProperties;
 import com.mark.nevexandrunkeeper.model.User;
 import com.mark.nevexandrunkeeper.quote.QuotationService;
 import com.mark.nevexandrunkeeper.quote.Quote;
@@ -37,6 +38,7 @@ public class CommentService {
     private final CommentJobsRepository commentJobsRepository;
     private final RunKeeperAPIClient apiClient;
     private final QuotationService quotationService;
+    private final String applicationAccessToken;
 
     @Autowired
     CommentService(UserService userService,
@@ -45,7 +47,8 @@ public class CommentService {
                    CommentsToUsersRepository commentsToUsersRepository,
                    CommentJobsRepository commentJobsRepository,
                    QuotationService quotationService,
-                   RunKeeperAPIClient runKeeperAPIClient) {
+                   RunKeeperAPIClient runKeeperAPIClient,
+                   ApplicationProperties applicationProperties) {
         this.userService = userService;
         this.latestCommentForUserRepository = latestCommentForUserRepository;
         this.apiClient = runKeeperAPIClient;
@@ -53,7 +56,7 @@ public class CommentService {
         this.quotationService = quotationService;
         this.commentsToUsersRepository = commentsToUsersRepository;
         this.commentJobsRepository = commentJobsRepository;
-
+        this.applicationAccessToken = applicationProperties.getOauth().getAccessToken();
     }
 
     public int sendCommentsToFriends() {
@@ -98,7 +101,7 @@ public class CommentService {
                 if (lastFitnessId > latestComment.getLastFitnessId()) {
                     // This user has done a fitness thing since the last time we checked, so we can add a new comment to their workout
                     Quote quoteToUse = quotationService.getQuote();
-                    if (addCommentToFitnessActivity(lastFitnessId, quoteToUse.getQuote(), userAccessToken)) {
+                    if (addCommentToFitnessActivity(lastFitnessId, quoteToUse.getQuote(), applicationAccessToken)) {
                         commentsAdded++;
                         saveCommentAdded(user.getUserId(), quoteToUse.getQuote());
 

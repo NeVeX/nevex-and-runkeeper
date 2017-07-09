@@ -24,7 +24,7 @@ logging:
 
 spring:
   profiles:
-    active: live, local
+    active: local
   properties.hibernate.format_sql: true
   thymeleaf:
     cache: false

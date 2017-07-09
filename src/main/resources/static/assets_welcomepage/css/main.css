@@ -3684,9 +3684,9 @@
 			right: 50%;
 			width: auto;
 			height: auto;
-			min-width: 100%;
-			min-height: 100%;
-			overflow: hidden;
+			/*min-width: 100%;*/
+			/*min-height: 100%;*/
+			overflow: visible;
 		}
 
 		#banner:before {
@@ -3713,7 +3713,8 @@
 		@media screen and (max-width: 1280px) {
 
 			#banner video {
-				display: none;
+				/* The video hides are certain sizes - we want to always show it */
+				/*display: none;*/
 			}
 
 		}
